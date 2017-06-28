@@ -1,3 +1,6 @@
+build/
+bin/
+
 # Compiled source #
 ###################
 *.com
