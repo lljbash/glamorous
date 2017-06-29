@@ -51,7 +51,7 @@ void ETF::calc_new_etf(int kernel) {
         			t_new += phi * t_cur_y * ws * wm * wd;
                 }
             }
-            etf.at<cv::Vec3f>(i, j) = normalize(t_new);
+            etf.at<cv::Vec3f>(i, j) = cv::normalize(t_new);
         }
     }
 }
@@ -61,7 +61,7 @@ float ETF::calc_phi(const cv::Vec3f &x, const cv::Vec3f &y) const {
 }
 
 float ETF::calc_ws(const cv::Point2f &x, const cv::Point2f &y, int r) const {
-    return norm(x - y) < r ? 1. : 0.;
+    return cv::norm(x - y) < r ? 1. : 0.;
 }
 
 float ETF::calc_wm(float g_x, float g_y) const {
