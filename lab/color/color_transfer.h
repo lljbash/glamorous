@@ -1,6 +1,7 @@
 #pragma once
 
 #include <opencv2/opencv.hpp>
+#include "color_difference.h"
 
 namespace glamorous {
 
@@ -8,23 +9,22 @@ class ColorTransfer {
 private:
     static constexpr NUM_COLOR = 5;
 
-    cv::Mat src;
-    cv::Mat dst;
-    cv::Mat color;
-    std::vector<float> w;
+    cv::Mat src_;
+    cv::Mat dst_;
+    cv::Mat color_;
+    std::vector<float> w_;
+
+    std::unique_ptr<ColorDifference> cd_;
 
 public:
+    ColorTransfer(ColorDifference *cd);
+    virtual ~ColorTransfer();
+
     void initialize(const cv::Mat &src, const cv::Mat &colors);
     void set_weight(const std::vector<float> &w);
     void apply(float level);
-    
-    void get_dst() const;
 
-protected:
-    virtual void convert_color(cv::Mat &src, bool reversed) const = 0;
-    virtual float get_distance(const cv::Vec3b &x, const cv::Vec3b &y) const = 0;
-    virtual cv::Vec3b get_average(const cv::Vec3b &src, const cv::Vec3b &ref,
-                                  float level) const = 0;
+    cv::Mat get_dst() const;
 };
 
 }

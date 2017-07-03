@@ -1,10 +1,10 @@
 #pragma once
 
-#include <color_transfer.h>
+#include "color_difference.h"
 
 namespace glamorous {
 
-class ColorTransferRGB : public ColorTransfer {
+class ColorDifferenceRGB : public ColorDifference {
 protected:
     void convert_color(cv::Mat &src, bool reversed) const override;
     float get_distance(const cv::Vec3b &x, const cv::Vec3b &y) const override;

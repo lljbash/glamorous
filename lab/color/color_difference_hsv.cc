@@ -1,8 +1,8 @@
-#include <color_transfer_hsv.h>
+#include "color_difference_hsv.h"
 
 using namespace glamorous;
 
-void ColorTransferHSV::convert_color(cv::Mat &src, bool reversed) const override {
+void ColorDifferenceHSV::convert_color(cv::Mat &src, bool reversed) const override {
     if(reversed) {
         cv::cvtColor(src, src, CV_BGR2HSV);
     } else {
@@ -10,7 +10,7 @@ void ColorTransferHSV::convert_color(cv::Mat &src, bool reversed) const override
     }
 }
 
-float ColorTransferHSV::get_distance(const cv::Vec3b &x, const cv::Vec3b &y) const override {
+float ColorDifferenceHSV::get_distance(const cv::Vec3b &x, const cv::Vec3b &y) const override {
     static const auto sqr = [](float a) -> float { return a * a; }
     // float dh = min(abs(x[0] - y[0]), 360 - abs(x[0] - y[0]));
     // float ds = (x[1] - y[1]);
@@ -21,7 +21,7 @@ float ColorTransferHSV::get_distance(const cv::Vec3b &x, const cv::Vec3b &y) con
     return result;
 }
 
-cv::Vec3b ColorTransferHSV::get_average(const cv::Vec3b &src, const cv::Vec3b &ref,
+cv::Vec3b ColorDifferenceHSV::get_average(const cv::Vec3b &src, const cv::Vec3b &ref,
                       float level) const override {
     cv::Vec3b res;
     float clock_dis = ref[0] - src[0];
