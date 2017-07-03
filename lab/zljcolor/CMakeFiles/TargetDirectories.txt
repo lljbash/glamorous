@@ -1,0 +1,1 @@
+/mnt/c/run/obj-c/glamorous/lab/color/CMakeFiles/test.dir
