@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <opencv2/opencv.hpp>
 #include "color_difference.h"
 
@@ -7,11 +8,11 @@ namespace glamorous {
 
 class ColorTransfer {
 private:
-    static constexpr NUM_COLOR = 5;
+    static constexpr int NUM_COLOR = 5;
 
     cv::Mat src_;
     cv::Mat dst_;
-    cv::Mat color_;
+    cv::Mat colors_;
     std::vector<float> w_;
 
     std::unique_ptr<ColorDifference> cd_;

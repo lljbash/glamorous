@@ -5,7 +5,7 @@
 namespace glamorous {
 
 class ColorDifference {
-protected:
+public:
     virtual void convert_color(cv::Mat &src, bool reversed) const = 0;
     virtual float get_distance(const cv::Vec3b &x, const cv::Vec3b &y) const = 0;
     virtual cv::Vec3b get_average(const cv::Vec3b &src, const cv::Vec3b &ref,
