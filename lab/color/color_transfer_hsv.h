@@ -4,7 +4,7 @@
 
 namespace glamorous {
 
-class ColorTransferRGB : public ColorTransfer {
+class ColorTransferHSV : public ColorTransfer {
 protected:
     void convert_color(cv::Mat &src, bool reversed) const override;
     float get_distance(const cv::Vec3b &x, const cv::Vec3b &y) const override;
