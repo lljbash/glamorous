@@ -29,6 +29,9 @@ void ColorTransfer::set_weight(const std::vector<float> &w) {
 void ColorTransfer::apply(float level) {
     for (int r = 0; r < src_.rows; ++r) {
         for (int c = 0; c < src_.cols; ++c) {
+            if (r == 200 && c == 400) {
+                printf("haha\n");
+            }
             const cv::Vec3b &pix = src_.at<cv::Vec3b>(r, c);
             const cv::Vec3b ref = cd_->pick_most_similar(pix, colors_, w_);
             cv::Vec3b avg = cd_->get_average(pix, ref, level);

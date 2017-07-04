@@ -13,7 +13,7 @@ cv::Vec3b ColorDifference::pick_most_similar(const cv::Vec3b &src,
             continue;
         }
         const cv::Vec3b &ref = colors.ptr<cv::Vec3b>()[i];
-        int dist = get_distance(src, ref) / w[i];
+        float dist = get_distance(src, ref) / w[i];
         if (dist < min_dist) {
             min_dist = dist;
             min_index = i;
