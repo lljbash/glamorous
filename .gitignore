@@ -10,6 +10,14 @@ bin/
 *.exe
 *.o
 *.so
+*.mexglx
+*.mexmaci
+*.mexmaci64
+*.mexa64
+*.mexw64
+*.mexw32
+# MATLAB Temp Files #
+*.m~
 
 # Packages #
 ############
