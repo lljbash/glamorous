@@ -3,9 +3,9 @@
 import os
 import os.path
 
-genres = ['抽象派', '点彩派', '后印象派', '印象派', '至上主义', '水墨']
+genres = ['abstract', 'pointillism', 'post_impressionism', 'impressionism', 'suprematism', 'shuimo']
 attrs = ['cp', 'fg', 'shape']
-rootdir = 'dataset_simplify'
+rootdir = 'data'
 
 
 def deepSearch(filename):
@@ -13,7 +13,7 @@ def deepSearch(filename):
     filename = unicode(filename, 'utf-8')
     files = os.listdir(filename)
     for f in files:
-        f = filename + '\\' + f
+        f = filename + '/' + f
         if os.path.isdir(f):
             deepSearch(f)
         if os.path.isfile(f):
@@ -27,11 +27,11 @@ def txtAnalysis(filename):
     for f in files:
         temp = '_cp.txt'
         if temp in f:
-            paintName = f[0:-7]
+            paintName = filename + '/' + f
             attrDict[paintName] = []
     for key in attrDict:
         for attr in attrs:
-            temp = filename + '\\' + key + '_' + attr + '.txt'
+            temp = key[0:-7] + '_' + attr + '.txt'
             if os.path.exists(temp):
                 fopen = open(temp, 'r')
                 line = fopen.readline()
@@ -40,13 +40,13 @@ def txtAnalysis(filename):
                 line = line.split(' ')
             else:
                 line = []
-            # attrDict[key].append(attr)
+            attrDict[key].append(attr)
             if attr == 'cp':
                 if len(line) != 23:
                     for i in range(0, 6):
                         attrDict[key].append('-1')
                 else:
-                    for i in range(1, 7):
+                    for i in range(1, 22):
                         attrDict[key].append(line[i])
             if attr == 'fg':
                 if len(line) != 4:
@@ -60,7 +60,7 @@ def txtAnalysis(filename):
                     for i in range(0, 2):
                         attrDict[key].append('-1')
                 else:
-                    for i in range(15, 17):
+                    for i in range(1, 17):
                         attrDict[key].append(line[i])
 
     return attrDict
@@ -68,21 +68,34 @@ def txtAnalysis(filename):
 
 def outputCSV(name, data):
     name = unicode(name, 'utf-8')
-    filename = name + '.csv'
-    fopen = open(filename, 'a')
+    filename = name + '.tsv'
+    fopen = open(rootdir + '/' + filename, 'a')
     for key, value in data.items():
-        # temp = key.replace(',', '')
-        # fopen.write('%s' % temp)
-        fopen.write(value[0])
-        for i in range(1, len(value)):
-            fopen.write(',')
+        temp = key.encode('utf-8')
+        temp = temp[5:-7]
+        if os.path.exists(rootdir + '/' + temp + '.jpg'):
+            temp += '.jpg'
+        else:
+            if os.path.exists(rootdir + '/' + temp + '.jpeg'):
+                temp += '.jpeg'
+            else:
+                if os.path.exists(rootdir + '/' + temp + '.JPG'):
+                    temp += '.JPG'
+                else:
+                    if os.path.exists(rootdir + '/' + temp + '.png'):
+                        temp += '.png'
+                    else:
+                        llj_bash = 250
+        fopen.write(temp)
+        for i in range(0, len(value)):
+            fopen.write('\t')
             fopen.write(value[i])
         fopen.write('\n')
     fopen.close()
 
 for i in range(0, 6):
     name = genres[i]
-    temp = rootdir + '\\' + name
+    temp = rootdir + '/' + name
     temp = unicode(temp, 'utf-8')
     allData = []
     deepSearch(temp)
