@@ -1,0 +1,1 @@
+dataset_simplify\µ„≤ ≈…\Georges_Seurat\The_Seine_at_La_Grande_Jatte_in_the_Spring_1888.jpg 0.411558 0.217061 0.528779 0.22934 0.59005 0.322803 224 211 192 205 187 169 139 124 111 125 104 95 97 76 63 

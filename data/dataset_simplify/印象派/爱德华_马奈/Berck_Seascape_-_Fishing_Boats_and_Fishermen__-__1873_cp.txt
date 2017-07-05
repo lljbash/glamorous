@@ -1,0 +1,1 @@
+dataset_simplify\印象派\爱德华_马奈\Berck_Seascape_-_Fishing_Boats_and_Fishermen__-__1873.jpg 0.238982 0.141663 0.448358 0.206358 0.528029 0.200304 75 38 33 47 36 37 76 88 85 63 69 65 196 191 177 

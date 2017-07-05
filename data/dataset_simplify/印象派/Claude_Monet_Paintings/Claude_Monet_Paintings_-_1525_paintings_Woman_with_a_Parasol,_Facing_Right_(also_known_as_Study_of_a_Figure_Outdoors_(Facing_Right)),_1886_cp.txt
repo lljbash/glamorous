@@ -1,0 +1,1 @@
+dataset_simplify\”°œÛ≈…\Claude_Monet_Paintings\Claude_Monet_Paintings_-_1525_paintings_Woman_with_a_Parasol,_Facing_Right_(also_known_as_Study_of_a_Figure_Outdoors_(Facing_Right)),_1886.jpg 0.203997 0.112231 0.652675 0.103409 0.327125 0.411308 156 163 176 122 149 165 70 106 80 141 132 111 182 177 175 

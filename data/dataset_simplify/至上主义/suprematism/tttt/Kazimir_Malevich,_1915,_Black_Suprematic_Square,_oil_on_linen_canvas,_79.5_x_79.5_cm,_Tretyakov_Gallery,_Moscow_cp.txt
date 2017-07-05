@@ -1,0 +1,1 @@
+dataset_simplify\至上主义\suprematism\Kazimir_Malevich,_1915,_Black_Suprematic_Square,_oil_on_linen_canvas,_79.5_x_79.5_cm,_Tretyakov_Gallery,_Moscow.jpg 0.19191 0.163914 0.524696 0.284932 0.46941 0.476689 209 209 208 173 172 174 61 60 77 51 50 64 41 42 63 

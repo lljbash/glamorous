@@ -1,0 +1,1 @@
+dataset_simplify\”°œÛ≈…\Claude_Monet_Paintings\Claude_Monet_Paintings_-_1525_paintings_The_Entrance_to_Giverny_under_the_Snow,_1885.jpg 0.160579 0.111055 0.815404 0.093018 0.386599 0.839211 155 180 202 166 189 206 192 198 201 117 147 171 117 160 193 

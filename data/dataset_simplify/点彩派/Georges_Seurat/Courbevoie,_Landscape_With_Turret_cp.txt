@@ -1,0 +1,1 @@
+dataset_simplify\µ„≤ ≈…\Georges_Seurat\Courbevoie,_Landscape_With_Turret.jpg 0.360581 0.183815 0.579905 0.223226 0.725532 0.366998 224 215 166 182 158 126 136 121 98 122 110 93 113 106 73 

@@ -1,0 +1,1 @@
+dataset_simplify\Ó¡ÏóÅÉ\Claude_Monet_Paintings\Claude_Monet_Paintings_-_1525_paintings_Marine_near_Etretat.jpg 0.179983 0.062901 0.700182 0.068999 0.855665 0.520122 171 163 137 177 167 152 161 158 154 140 120 103 39 26 12 

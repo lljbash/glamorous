@@ -1,0 +1,1 @@
+dataset_simplify\µ„≤ ≈…\Georges_Seurat\The_Channel_at_Gravelines,_Evening,_1890.jpg 0.190885 0.11818 0.63811 0.185147 0.788356 0.535465 180 205 170 118 105 85 182 184 170 112 120 108 26 28 23 

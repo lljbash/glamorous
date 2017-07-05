@@ -1,0 +1,15 @@
+Zhong Shu:
+saturation: 0.05
+saturationContrast: 0.05
+brightness: 0.65
+brightnessContrast: 0.15
+warmOrCool: 0.85
+clearOrDull: 0.65
+
+Zhong Wei Shu:
+saturation: 0.100421
+saturationContrast: 0.0688958
+brightness: 0.724407
+brightnessContrast: 0.183237
+warmOrCool: 0.579382
+clearOrDull: 0.667562
