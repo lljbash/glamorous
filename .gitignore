@@ -10,6 +10,7 @@ bin/
 *.exe
 *.o
 *.so
+*.pyc
 *.mexglx
 *.mexmaci
 *.mexmaci64
