@@ -1,1 +1,0 @@
-dataset_simplify\ºóÓ¡ÏóÅÉ\Van.gogh.paintings\Auvers_sur_Oise_(1890)\Daubigny_s_Garden_3.jpg 0.378662 0.143653 0.580781 0.142478 0.995459 0.279732 151 177 151 208 207 167 155 156 95 108 118 74 84 124 76 

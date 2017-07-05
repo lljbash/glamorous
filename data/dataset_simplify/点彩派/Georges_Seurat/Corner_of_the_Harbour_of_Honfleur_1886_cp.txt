@@ -1,1 +1,0 @@
-dataset_simplify\µ„≤ ≈…\Georges_Seurat\Corner_of_the_Harbour_of_Honfleur_1886.jpg 0.205729 0.146221 0.693161 0.186684 0.527829 0.620082 219 219 217 212 199 181 185 183 183 103 91 95 77 61 72 

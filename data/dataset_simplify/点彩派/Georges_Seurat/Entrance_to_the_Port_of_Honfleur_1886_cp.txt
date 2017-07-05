@@ -1,1 +1,0 @@
-dataset_simplify\µ„≤ ≈…\Georges_Seurat\Entrance_to_the_Port_of_Honfleur_1886.jpg 0.227881 0.141013 0.792777 0.11943 0.685478 0.760512 78 92 75 146 168 135 209 212 205 214 192 145 128 64 51 
