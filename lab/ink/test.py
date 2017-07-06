@@ -72,13 +72,13 @@ def main():
     #
     # cv2.imwrite('target_step3.jpg', img3)
 
-    print('Now Graying and Enhancing...')
-    img4 = cv2.cvtColor(img3, cv2.COLOR_BGR2GRAY)
-    minVal = 20
-    maxVal = 200
-    outufuncXArray = normalize_func(minVal,maxVal)(img4) #the result is a ufunc object
-    img5 = outufuncXArray.astype('uint8') # cast ufunc object ndarray to float ndarray
-    print('Graying and Enhancing Done!')
+    # print('Now Graying and Enhancing...')
+    # img4 = cv2.cvtColor(img3, cv2.COLOR_BGR2GRAY)
+    # minVal = 20
+    # maxVal = 200
+    # outufuncXArray = normalize_func(minVal,maxVal)(img4) #the result is a ufunc object
+    # img5 = outufuncXArray.astype('uint8') # cast ufunc object ndarray to float ndarray
+    # print('Graying and Enhancing Done!')
 
 def normalize_func(minVal, maxVal, newMinValue=0, newMaxValue=255 ):
     def normalizeFunc(x):
