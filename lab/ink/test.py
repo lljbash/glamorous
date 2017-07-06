@@ -67,10 +67,24 @@ def main():
             img3[i,j,:] = np.median(img2[x1:x2,y1:y2,:],axis=(0,1))
     print('Smoothing Done!')
 
-    plt.imshow(img3, 'gray')
-    plt.show()
+    # plt.imshow(img3, 'gray')
+    # plt.show()
+    #
+    # cv2.imwrite('target_step3.jpg', img3)
 
-    cv2.imwrite('target_step3.jpg', img3)
+    print('Now Graying and Enhancing...')
+    img4 = cv2.cvtColor(img3, cv2.COLOR_BGR2GRAY)
+    minVal = 20
+    maxVal = 200
+    outufuncXArray = normalize_func(minVal,maxVal)(img4) #the result is a ufunc object
+    img5 = outufuncXArray.astype('uint8') # cast ufunc object ndarray to float ndarray
+    print('Graying and Enhancing Done!')
+
+def normalize_func(minVal, maxVal, newMinValue=0, newMaxValue=255 ):
+    def normalizeFunc(x):
+        r=np.rint((x-minVal)*newMaxValue/(maxVal-minVal) + newMinValue)
+        return max(newMinValue, min(newMaxValue, r))
+    return np.frompyfunc(normalizeFunc,1,1)
 
 if __name__ == '__main__':
     main()
