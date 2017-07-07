@@ -2,6 +2,8 @@
 
 #include <string>
 
+namespace glamorous {
+
 struct ImageAttr {
     std::string filename;
 
@@ -25,3 +27,5 @@ struct ImageAttr {
     int shape_big;
     int shape_small;
 };
+
+} // namespace glamorous
