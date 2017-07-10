@@ -1,6 +1,7 @@
 #pragma once
 
 #include <functional>
+#include <string>
 #include "threadsafe_queue.h"
 #include "struct/request_status.h"
 
@@ -14,9 +15,10 @@ public:
     using WaitQueuePointer = std::shared_ptr<WaitQueue>;
     using NextFunc = std::function<ComponentPointer(RequestStatusPointer)>;
     
-    Component();
+    Component(std::string name = "Component");
     Component(const Component &) = delete;
     Component &operator=(const Component &) = delete;
+    virtual ~Component() = default;
     
     void start(WaitQueuePointer output_queue = nullptr);
     void push_request(RequestStatusPointer request);
@@ -28,6 +30,8 @@ protected:
     virtual void process(RequestStatusPointer request) = 0;
 
 private:
+    std::string name_;
+    
     WaitQueuePointer queue_;
     NextFunc next_;
 };

@@ -1,14 +1,17 @@
 #include "component/component.h"
+#include "log.h"
 
 using namespace glamorous;
 
-Component::Component() {
+Component::Component(std::string name) : name_(name) {
     queue_ = std::make_shared<WaitQueue>();
     next_ = [](RequestStatusPointer) -> ComponentPointer { return nullptr; };
+    Log::info("Component %s created.", name_.c_str());
 }
 
 void Component::start(WaitQueuePointer output_queue) {
     RequestStatusPointer request;
+    Log::info("Component %s started.", name_.c_str());
     while (true) {
         queue_->wait_and_pop(request);
         if (request == nullptr) {
@@ -19,10 +22,11 @@ void Component::start(WaitQueuePointer output_queue) {
         if (next != nullptr) {
             next->push_request(request);
         }
-        if (output_queue) {
+        if (output_queue != nullptr) {
             output_queue->push(request);
         }
     }
+    Log::info("Component %s stopped.", name_.c_str());
 }
 
 void Component::push_request(RequestStatusPointer request) {
