@@ -13,6 +13,14 @@ std::string Component::get_name() const {
     return name_;
 }
 
+bool Component::is_free() const {
+    return queue_->empty();
+}
+
+std::thread Component::spawn(WaitQueuePointer output_queue) {
+    return std::thread(&Component::start, this, output_queue);
+}
+
 void Component::start(WaitQueuePointer output_queue) {
     RequestStatusPointer request;
     Log::info("Component %s started.", name_.c_str());
@@ -39,6 +47,7 @@ void Component::start(WaitQueuePointer output_queue) {
     for (ComponentPointer next : all_next_) {
         next->push_request(nullptr);
     }
+    while (queue_->try_pop(request));
     Log::info("Component %s stopped.", name_.c_str());
 }
 

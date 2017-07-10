@@ -2,6 +2,7 @@
 
 #include <functional>
 #include <string>
+#include <thread>
 #include "threadsafe_queue.h"
 #include "struct/request_status.h"
 
@@ -21,6 +22,9 @@ public:
     virtual ~Component() = default;
     
     std::string get_name() const;
+    bool is_free() const;
+    
+    std::thread spawn(WaitQueuePointer output_queue = nullptr);
     
     void start(WaitQueuePointer output_queue = nullptr);
     void push_request(RequestStatusPointer request);
