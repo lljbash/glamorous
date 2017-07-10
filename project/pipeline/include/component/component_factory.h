@@ -14,4 +14,12 @@ public:
     ComponentPointer create(std::string name = "SimpleComponent") override;
 };
 
+class ColorTransferComponentFactory : ComponentFactory {
+public:
+    ColorTransferComponentFactory(float level = 0.4);
+    ComponentPointer create(std::string name = "ColorTransferComponent") override;
+private:
+    float level_;
+};
+
 } // namespace glamorous
