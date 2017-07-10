@@ -20,11 +20,15 @@ public:
     Component &operator=(const Component &) = delete;
     virtual ~Component() = default;
     
+    std::string get_name() const;
+    
     void start(WaitQueuePointer output_queue = nullptr);
     void push_request(RequestStatusPointer request);
     
     void set_next_component(ComponentPointer component);
+    
     void set_next_component_func(const NextFunc &func);
+    void set_all_next_component(std::vector<ComponentPointer> all_next);
     
 protected:
     virtual void process(RequestStatusPointer request) = 0;
@@ -34,6 +38,7 @@ private:
     
     WaitQueuePointer queue_;
     NextFunc next_;
+    std::vector<ComponentPointer> all_next_;
 };
 
 } // namespace glamorous
