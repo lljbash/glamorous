@@ -47,14 +47,12 @@ void Pipeline::start_parallel(WaitQueuePointer output) {
         return;
     }
     threads_.clear();
+    Log::info("Start parallel.");
     for (size_t i = 0; i < component_list_.size(); ++i) {
         WaitQueuePointer q = i == component_list_.size() - 1 ? output : nullptr;
         std::thread t = component_list_[i]->spawn(q);
-        threads_.push_back(move(t));
-    }
-    Log::info("Start parallel.");
-    for (std::thread &t : threads_) {
         t.detach();
+        threads_.push_back(move(t));
     }
 }
 
@@ -66,7 +64,7 @@ void Pipeline::new_request(RequestStatusPointer request) {
     component_list_[0]->push_request(request);
 }
 
-void Pipeline::stop_parall() {
+void Pipeline::stop_parallel() {
     if (threads_.empty()) {
         Log::error("Pipeline not running in parallel!");
         return;

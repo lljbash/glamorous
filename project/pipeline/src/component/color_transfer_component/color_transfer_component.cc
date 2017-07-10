@@ -17,7 +17,7 @@ ColorTransferComponent::ColorTransferComponent(float level, std::string name)
     : Component(name), level_(level) {}
 
 void ColorTransferComponent::process(RequestStatusPointer request) {
-    cv::Mat image = request->src_img;
+    cv::Mat image = request->res_img;
     ColorTransfer ct(new ColorDifferenceHSV());
     cv::Mat c = cv::Mat::zeros(1, ColorTransfer::NUM_COLOR, CV_8UC3);
     for (int i = 0; i < ColorTransfer::NUM_COLOR; i++) {

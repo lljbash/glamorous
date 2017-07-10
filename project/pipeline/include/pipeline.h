@@ -23,7 +23,7 @@ public:
     
     void start_parallel(WaitQueuePointer output);
     void new_request(RequestStatusPointer request);
-    void stop_parall(); // try to stop, but finish current jobs
+    void stop_parallel(); // try to stop, but finish current jobs
 
 private:
     std::vector<ComponentPointer> component_list_;

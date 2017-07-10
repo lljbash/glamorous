@@ -45,4 +45,5 @@ void Log::log(const char* type, const char* fmt, va_list ap) {
     fprintf(stderr, "%s %s ", foo, type);
     vfprintf(stderr, fmt, ap);
     fprintf(stderr, "\n");
+    fflush(stderr);
 }
