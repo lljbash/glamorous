@@ -22,4 +22,9 @@ private:
     float level_;
 };
 
+class MeanContrastTransferComponentFactory : ComponentFactory {
+public:
+    ComponentPointer create(std::string name = "MeanContrastTransferComponent") override;
+};
+
 } // namespace glamorous
