@@ -1,18 +1,18 @@
-img = imread('aaaaa_stylized_shuimo3_g.jpg');
+img = imread('target.jpg');
 [R, C, ~] = size(img);
 lab = rgb2lab(img);
 AA = lischinski(log(lab(:,:,1)+1), 'Lambda', 0.02, 'Alpha', 0.2);
-I = edge(rgb2gray(img), 'Canny', 0.3);
+I = edge(rgb2gray(img), 'Canny', 0.6);
 imshow(I)
 
-% w = 0.9 * reshape(I, R*C, 1) + 0.1 * ones(R*C,1); %ok
-w = reshape(I, R*C, 1); %ok
+w = 0.9 * reshape(I, R*C, 1) + 0.1 * ones(R*C,1); %ok
+% w = reshape(I, R*C, 1); %ok
 % w = ones(R*C,1);
 % w = reshape((1-lab(:,:,1)/100), R*C, 1);
 g1 = reshape(lab(:,:,1), R*C, 1);
 % g1 = reshape((~I)*100, R*C, 1); %ok
 g2 = reshape(lab(:,:,2), R*C, 1); %ok
-g3 = reshape(lab(:,:,3), R*C, 1); %ok
+g3 = reshape(lab(:,:,3), R*C, 1); %okim
 % w = ~w * 0 + (w).*g;
 %%%%%%%
 % logicI = true(R, C);
