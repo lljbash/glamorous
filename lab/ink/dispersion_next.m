@@ -1,16 +1,31 @@
-img = imread('target.jpg');
+img = imread('aaaaa_stylized_shuimo3_g.jpg');
 [R, C, ~] = size(img);
 lab = rgb2lab(img);
-AA = lischinski(log(lab(:,:,1)+1), 'Lambda', 0.02, 'Alpha', 0.2);
-I = edge(rgb2gray(img), 'Canny', 0.6);
-imshow(I)
+AA = lischinski(log(lab(:,:,1)+1), 'Lambda', 0.02, 'Alpha', 0.8);
+I = edge(rgb2gray(img), 'Canny', 0.3);
 
-w = 0.9 * reshape(I, R*C, 1) + 0.1 * ones(R*C,1); %ok
-% w = reshape(I, R*C, 1); %ok
+w1 = 0.9 * reshape(I, R*C, 1) + 0.1 * ones(R*C,1); %ok
+w = reshape(I, R*C, 1); %ok
 % w = ones(R*C,1);
 % w = reshape((1-lab(:,:,1)/100), R*C, 1);
-g1 = reshape(lab(:,:,1), R*C, 1);
-% g1 = reshape((~I)*100, R*C, 1); %ok
+% g1 = reshape(lab(:,:,1), R*C, 1);
+%%%%%%%%%%%%% Deal with edges: g1
+t = lab(:,:,1);
+for i=1:R
+    for j=1:C
+        if (I(i,j))
+            x1=max(0, i-1);
+            x2=min(R-1,i+1);
+            y1=max(0, j-1);
+            y2=min(C-1, j+1);
+            t(i,j) = sum(sum(lab(x1:x2,y1:y2,1).*I(x1:x2,y1:y2))) /  sum(sum(I(x1:x2,y1:y2)));
+        end
+    end
+end
+%%%%%%%%%%%%%
+% g1 = reshape((~I)*50, R*C, 1); %ok
+% g1 = reshape(lab(:,:,1), R*C, 1); %oldtry
+g1 = reshape(I .* t + (~I) .* lab(:,:,1), R*C, 1);
 g2 = reshape(lab(:,:,2), R*C, 1); %ok
 g3 = reshape(lab(:,:,3), R*C, 1); %okim
 % w = ~w * 0 + (w).*g;
@@ -24,6 +39,7 @@ b1 = w .* g1;
 b2 = w .* g2;
 b3 = w .* g3;
 
+A1 = AA + spdiags(w1, 0, R*C, R*C);
 A = AA + spdiags(w, 0, R*C, R*C);
 % A = AA + spdiags(myW, 0, R*C, R*C);
 % M = AA + eye(R*C, 'like', AA);
