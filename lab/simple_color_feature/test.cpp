@@ -25,16 +25,18 @@ void getCPAttr(std::string filename) {
         for (int x=0;x<dest1->width;x++)
         {
             double tmpHue = (double)CV_IMAGE_ELEM(dest1, uchar, y, x * 3);
-            double tmpHue =
             hueSum += tmpHue/180;
-            if ((tmpHue>30) && (tmpHue<110))
+            if ((tmpHue>30) && (tmpHue<110)){
+                std::cout << "*";
                 nCoolColor++;
+            }
 
             satSum += (double)CV_IMAGE_ELEM(dest1, uchar, y, x * 3 + 1) /255;
             double tmpBri = (double)CV_IMAGE_ELEM(dest1, uchar, y, x * 3 + 2) /255;
             briSum += tmpBri;
             if (tmpBri > 0.7)
                 nClearColor++;
+            std::cout << tmpHue << std::endl;
         }
 
     double bright = briSum/imgSize;
@@ -67,7 +69,7 @@ void getCPAttr(std::string filename) {
 
 int main(int argc, char const *argv[]) {
     std::string filename("../zlj.png");
-    getCPAttr();
+    getCPAttr(filename);
 
     return 0;
 }
