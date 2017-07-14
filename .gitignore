@@ -1,6 +1,10 @@
 build/
 bin/
 .tags*
+.jpg
+.png
+.jpeg
+__pycache__/
 
 # Compiled source #
 ###################
