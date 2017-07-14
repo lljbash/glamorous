@@ -45,6 +45,6 @@ int main(int argc, char const *argv[]) {
     RequestStatusPointer rso;
     output->wait_and_pop(rso);
     
-    cv::imwrite("color.jpg", rs->res_img);
+    cv::imwrite("color.jpg", rso->res_img);
     return 0;
 }
