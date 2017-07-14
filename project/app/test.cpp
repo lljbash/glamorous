@@ -15,16 +15,13 @@ int main(int argc, char const *argv[]) {
     ComponentPointer cp2 = mctcf.create();
     OilpaintTransferComponentFactory otcf;
     ComponentPointer cp_oil = otcf.create();
+    ColorAttributeExtractorComponentFactory caecf;
+    ComponentPointer cp_ce = caecf.create();
     
     RequestStatusPointer rs = std::make_shared<RequestStatus>();
     
     rs->src_img = cv::imread("../../lab/color/a.jpg");
     rs->res_img = rs->src_img.clone();
-    
-    rs->src_attr.saturation_mean = 0.38143;
-    rs->src_attr.saturation_contrast = 0.107267;
-    rs->src_attr.brightness_mean = 0.738516;
-    rs->src_attr.brightness_contrast = 0.217394;
 
     rs->ref_attr.saturation_mean = 0.231219;
     rs->ref_attr.saturation_contrast = 0.114508;
@@ -40,7 +37,7 @@ int main(int argc, char const *argv[]) {
     
     Pipeline p;
     auto output = std::make_shared<Component::WaitQueue>();
-    p.set_static_pipeline({cp_oil});
+    p.set_static_pipeline({cp_ce});
     p.start_parallel(output);
     p.new_request(rs);
     p.stop_parallel();
