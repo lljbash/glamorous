@@ -37,4 +37,9 @@ public:
     ComponentPointer create(std::string name = "ColorAttributeExtractorComponent") override;
 };
 
+class SimilarPic5colorComponentFactory : ComponentFactory {
+public:
+	ComponentPointer create(std::string name = "SimilarPic5colorComponent") override;
+};
+
 } // namespace glamorous
