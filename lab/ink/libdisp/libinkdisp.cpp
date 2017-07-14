@@ -1,9 +1,9 @@
 //
 // MATLAB Compiler: 6.4 (R2017a)
-// Date: Thu Jul 13 11:34:25 2017
+// Date: Fri Jul 14 14:39:14 2017
 // Arguments:
-// "-B""macro_default""-W""cpplib:libinkdisp""-T""link:lib""inkdisp.m""-d""libdi
-// sp"
+// "-B""macro_default""-W""cpplib:libinkdisp""-T""link:lib""inkdisp.m""gptoolbox
+// /imageprocessing/lischinski.m""-d""libdisp"
 //
 
 #include <stdio.h>
@@ -114,10 +114,23 @@ bool MW_CALL_CONV mlxInkdisp(int nlhs, mxArray *plhs[], int nrhs, mxArray *prhs[
   return mclFeval(_mcr_inst, "inkdisp", nlhs, plhs, nrhs, prhs);
 }
 
+LIB_libinkdisp_C_API 
+bool MW_CALL_CONV mlxLischinski(int nlhs, mxArray *plhs[], int nrhs, mxArray *prhs[])
+{
+  return mclFeval(_mcr_inst, "lischinski", nlhs, plhs, nrhs, prhs);
+}
+
 LIB_libinkdisp_CPP_API 
 void MW_CALL_CONV inkdisp(int nargout, mwArray& img2, const mwArray& img, const mwArray& 
                           lambda, const mwArray& alpha, const mwArray& canny)
 {
   mclcppMlfFeval(_mcr_inst, "inkdisp", nargout, 1, 4, &img2, &img, &lambda, &alpha, &canny);
+}
+
+LIB_libinkdisp_CPP_API 
+void MW_CALL_CONV lischinski(int nargout, mwArray& A, const mwArray& L, const mwArray& 
+                             varargin)
+{
+  mclcppMlfFeval(_mcr_inst, "lischinski", nargout, 1, -2, &A, &L, &varargin);
 }
 

@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 2.8)
+project( main )
+find_package( OpenCV REQUIRED )
+include_directories( ${OpenCV_INCLUDE_DIRS} /usr/local/MATLAB/R2017a/extern/include )
+link_directories( /usr/local/MATLAB/R2017a/runtime/glnxa64 )
+link_directories( ../ )
+add_executable( main main.cpp )
+target_link_libraries( main ${OpenCV_LIBS} mwmclmcrrt inkdisp )
