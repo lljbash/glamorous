@@ -13,6 +13,8 @@ int main(int argc, char const *argv[]) {
     ComponentPointer cp = ctcf.create();
     MeanContrastTransferComponentFactory mctcf;
     ComponentPointer cp2 = mctcf.create();
+    OilpaintTransferComponentFactory otcf;
+    ComponentPointer cp_oil = otcf.create();
     
     RequestStatusPointer rs = std::make_shared<RequestStatus>();
     
@@ -38,13 +40,13 @@ int main(int argc, char const *argv[]) {
     
     Pipeline p;
     auto output = std::make_shared<Component::WaitQueue>();
-    p.set_static_pipeline({cp, cp2});
+    p.set_static_pipeline({cp_oil});
     p.start_parallel(output);
     p.new_request(rs);
     p.stop_parallel();
     RequestStatusPointer rso;
     output->wait_and_pop(rso);
     
-    cv::imwrite("color.jpg", rs->res_img);
+    cv::imwrite("color.jpg", rso->res_img);
     return 0;
 }

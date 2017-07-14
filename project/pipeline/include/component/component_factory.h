@@ -27,4 +27,9 @@ public:
     ComponentPointer create(std::string name = "MeanContrastTransferComponent") override;
 };
 
+class OilpaintTransferComponentFactory : ComponentFactory {
+public:
+    ComponentPointer create(std::string name = "OilpaintTransferComponent") override;
+};
+
 } // namespace glamorous
