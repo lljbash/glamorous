@@ -32,4 +32,9 @@ public:
     ComponentPointer create(std::string name = "OilpaintTransferComponent") override;
 };
 
+class ColorAttributeExtractorComponentFactory : ComponentFactory {
+public:
+    ComponentPointer create(std::string name = "ColorAttributeExtractorComponent") override;
+};
+
 } // namespace glamorous
