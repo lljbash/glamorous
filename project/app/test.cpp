@@ -17,6 +17,8 @@ int main(int argc, char const *argv[]) {
     ComponentPointer cp_oil = otcf.create();
     ColorAttributeExtractorComponentFactory caecf;
     ComponentPointer cp_ce = caecf.create();
+    SimilarPic5colorComponentFactory sp5cf;
+    ComponentPointer cp_5c = sp5cf.create();
     
     RequestStatusPointer rs = std::make_shared<RequestStatus>();
     
