@@ -16,8 +16,8 @@ using std::ifstream;
 using std::vector;
 using std::string;
 
-const string attCutPath = "D:\\SummerPractice\\RCC_EXE\\AttCut.exe";
-const string databasePath = "D:\\SummerPractice\\dataset_simplify\\";
+const string attCutPath = "../imgsaliency/pyimgsaliency/photo2sketch.py";
+const string databasePath = "./database/";
 const string styleName[] = {"abstract", "Impressionism", "pointillism", "Post_Impressionism", "shuimo", "suprematism"};
 
 string getRCCImg(const string& path)
@@ -28,13 +28,8 @@ string getRCCImg(const string& path)
 	if (!tmpFin) 
 	{
 		// create Img_RCC.png
-		int splitIndex = path.rfind('\\');
-		string imgName = path;
-		string imgFolderPath = path.substr(0, splitIndex);
-		cout << imgName << " " << imgFolderPath << endl;
-
-		string attCutCmd = attCutPath;
-		attCutCmd += (" " + imgName + " " + imgFolderPath + " 70");
+		string attCutCmd = "python " + attCutPath;
+		attCutCmd += (" " + path + " " + RCCPath);
 		cout << attCutCmd << endl;
 		system(attCutCmd.c_str());	
 	}
@@ -46,7 +41,7 @@ void getFiles( string path, vector<string>& files )
 { 
     const char* basePath = path.c_str();
 
-    //printf("%s\n", basePath);
+    // cout << "BASE PATH: " << basePath << endl;
 
     DIR *dir;
     struct dirent *ptr;
@@ -62,22 +57,14 @@ void getFiles( string path, vector<string>& files )
     {
         if(strcmp(ptr->d_name,".")==0 || strcmp(ptr->d_name,"..")==0)    ///current dir OR parrent dir
             continue;
-        else if(ptr->d_type == 8)    ///file
+        else if(ptr->d_type == 8 || ptr->d_type == 10)    ///file
         {
-            string foo(basePath, sizeof(basePath));
+            string foo(basePath);
             string bar(ptr->d_name);
-            foo = foo + bar;
+            foo = foo + "/" + bar;
             files.push_back(foo);
-            // printf("d_name:%s/%s\n",basePath,ptr->d_name);
+            cout << foo << endl;
         }   
-        else if(ptr->d_type == 10)    ///link file
-        {
-            string foo(basePath, sizeof(basePath));
-            string bar(ptr->d_name);
-            foo = foo + bar;
-            files.push_back(foo);
-            // printf("d_name:%s/%s\n",basePath,ptr->d_name);
-        }
         else if(ptr->d_type == 4)    ///dir
         {
             memset(base,'\0',sizeof(base));
@@ -139,6 +126,8 @@ void showBestMatch(const string& srcRCCPath, const string& bestMatchPath)
 
 	namedWindow("ret");
 	imshow("ret",ret);
+
+	waitKey(0);
 }
 
 
@@ -151,7 +140,7 @@ int main(int argc, char* argv[])
 		   maybe we should select a random one rather than the first one.
 	*/
 
-	string srcPath = "D:\\SummerPractice\\A_Vase_of_Flowers_1896.jpg";
+	string srcPath = "./aaa.jpg";
 	int styleSelector = 4; // 0 - 5
 	string styleFolder = (databasePath + styleName[styleSelector]);
 	cout << styleFolder << endl;
@@ -167,6 +156,7 @@ int main(int argc, char* argv[])
 	// get RCC image
 	string srcRCCPath = getRCCImg(srcPath);
  //   Mat srcRcc=  imread(RCCPath.c_str(), CV_LOAD_IMAGE_COLOR);    
+	cout << "SRC RCC: " << srcRCCPath << endl;
 
 	
     
@@ -215,11 +205,8 @@ int main(int argc, char* argv[])
 		 << "BEST MATCH: " << bestMatchPath << endl
 		 << "-------------------------\n";
 
-//	string bestMatchPath = "D:\\SummerPractice\\dataset_simplify\\Impressionism\\雷诺阿\\Little_Blue_Nude,_1878-79.jpg";
-	showBestMatch(srcRCCPath, bestMatchPath);
- 
-
-    waitKey(0 );  
+	cout << srcRCCPath << ", " << bestMatchPath << endl;
+	showBestMatch(srcRCCPath, bestMatchPath);  
   
     return 0;  
 }
