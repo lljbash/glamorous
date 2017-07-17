@@ -53,6 +53,11 @@ public:
     ComponentPointer create(std::string name = "DatabaseMatchComponent") override;
 private:
     std::string root_dir_;
+}
+
+class SimilarPic5colorComponentFactory : ComponentFactory {
+public:
+	ComponentPointer create(std::string name = "SimilarPic5colorComponent") override;
 };
 
 } // namespace glamorous
