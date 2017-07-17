@@ -1,4 +1,5 @@
 #include "similar_pic_5color_component.h"
+#include <opencv2/opencv.hpp>
 #include "component/component_factory.h"
 #include "log.h"
 #include "image_database.h"
@@ -13,7 +14,6 @@ SimilarPic5colorComponent::SimilarPic5colorComponent(std::string name) : Compone
 
 void SimilarPic5colorComponent::process(RequestStatusPointer request) {
     Log::info("SimilarPic5colorComponent is processing...");
-    // TODO: assign ref_attr according to src_img's 5color(most similar)
 
     // get image attr vec
     const std::vector<ImageAttr>& image_attr_vec_pointer = request->image_db->get_image_list();
@@ -48,5 +48,6 @@ void SimilarPic5colorComponent::process(RequestStatusPointer request) {
         }
     }
     request->ref_attr = image_attr_vec_pointer[selected_attr_index];
+    request->ref_img = cv::imread(request->ref_attr->filename.c_str(), 1);
 }
 
