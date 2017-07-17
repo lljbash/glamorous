@@ -37,4 +37,22 @@ public:
     ComponentPointer create(std::string name = "ColorAttributeExtractorComponent") override;
 };
 
+class InkTransferComponentFactory : ComponentFactory {
+public:
+    ComponentPointer create(std::string name = "InkTransferComponent") override;
+};
+
+class Word2ImageComponentFactory : ComponentFactory {
+public:
+    ComponentPointer create(std::string name = "Word2ImageComponent") override;
+};
+
+class DatabaseMatchComponentFactory : ComponentFactory {
+public:
+    DatabaseMatchComponentFactory(std::string root_dir);
+    ComponentPointer create(std::string name = "DatabaseMatchComponent") override;
+private:
+    std::string root_dir_;
+};
+
 } // namespace glamorous

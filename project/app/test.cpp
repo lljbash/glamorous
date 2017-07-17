@@ -17,11 +17,15 @@ int main(int argc, char const *argv[]) {
     ComponentPointer cp_oil = otcf.create();
     ColorAttributeExtractorComponentFactory caecf;
     ComponentPointer cp_ce = caecf.create();
+    DatabaseMatchComponentFactory dmcf("/mnt/c/run/obj-c/");
+    ComponentPointer cp_dm = dmcf.create();
     
     RequestStatusPointer rs = std::make_shared<RequestStatus>();
     
     rs->src_img = cv::imread("../../lab/color/a.jpg");
     rs->res_img = rs->src_img.clone();
+    
+    rs->request_type = RequestStatus::RequestType::PostImpressionism;
 
     rs->ref_attr.saturation_mean = 0.231219;
     rs->ref_attr.saturation_contrast = 0.114508;
@@ -37,7 +41,7 @@ int main(int argc, char const *argv[]) {
     
     Pipeline p;
     auto output = std::make_shared<Component::WaitQueue>();
-    p.set_static_pipeline({cp_ce});
+    p.set_static_pipeline({cp_dm});
     p.start_parallel(output);
     p.new_request(rs);
     p.stop_parallel();
