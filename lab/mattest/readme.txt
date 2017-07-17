@@ -15,7 +15,7 @@ MATLAB Compiler SDK
 
   (2) run the MATLAB Runtime installer.
 
-Or download the Macintosh version of the MATLAB Runtime for R2017a 
+Or download the Linux 64-bit version of the MATLAB Runtime for R2017a 
 from the MathWorks Web site by navigating to
 
    http://www.mathworks.com/products/compiler/mcr/index.html
@@ -26,14 +26,11 @@ Package and Distribute in the MATLAB Compiler SDK documentation
 in the MathWorks Documentation Center.    
 
 
-NOTE: You will need administrator rights to run MCRInstaller. 
-
-
 2. Files to Deploy and Package
 
 Files to package for Shared Libraries
 =====================================
--libtest.dylib
+-libtest.so
 -libtest.h
 -MCRInstaller.zip 
    -if end users are unable to download the MATLAB Runtime using the above  
@@ -52,23 +49,30 @@ Center.
 
 4. Appendix 
 
-A. Mac systems:
+A. Linux x86-64 systems:
 In the following directions, replace MCR_ROOT by the directory where the MATLAB Runtime 
    is installed on the target machine.
 
-If the environment variable DYLD_LIBRARY_PATH is undefined, set it to the concatenation 
+(1) Set the environment variable XAPPLRESDIR to this value:
+
+    MCR_ROOT/v92/X11/app-defaults
+
+
+(2) If the environment variable LD_LIBRARY_PATH is undefined, set it to the concatenation 
    of the following strings:
 
-    MCR_ROOT/v92/runtime/maci64:
-    MCR_ROOT/v92/sys/os/maci64:
-    MCR_ROOT/v92/bin/maci64
+    MCR_ROOT/v92/runtime/glnxa64:
+    MCR_ROOT/v92/bin/glnxa64:
+    MCR_ROOT/v92/sys/os/glnxa64:
+    MCR_ROOT/v92/sys/opengl/lib/glnxa64
 
-If it is defined, set it to the concatenation of these strings:
+    If it is defined, set it to the concatenation of these strings:
 
     ${LD_LIBRARY_PATH}: 
-    MCR_ROOT/v92/runtime/maci64:
-    MCR_ROOT/v92/sys/os/maci64:
-    MCR_ROOT/v92/bin/maci64
+    MCR_ROOT/v92/runtime/glnxa64:
+    MCR_ROOT/v92/bin/glnxa64:
+    MCR_ROOT/v92/sys/os/glnxa64:
+    MCR_ROOT/v92/sys/opengl/lib/glnxa64
 
    For more detail information about setting the MATLAB Runtime paths, see Package and 
    Distribute in the MATLAB Compiler SDK documentation in the MathWorks Documentation 

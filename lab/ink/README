@@ -1,0 +1,8 @@
+README
+--------------
+
+in MATLAB, execute
+```
+>> !mkdir libdisp
+>> mcc -W cpplib:libinkdisp -T link:lib inkdisp.m -d libdisp
+```
