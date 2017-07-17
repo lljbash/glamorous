@@ -1,0 +1,11 @@
+# compiling
+
+```
+g++ runlua.cpp -o runlua -I ~/torch/install/include -L ~/torch/install/lib -lluajit
+```
+
+If you are using macOS, do this instead:
+```
+g++ runlua.cpp -o runlua -I ~/torch/install/include -L ~/torch/install/lib -lluajit -pagezero_size 10000 -image_base 100000000
+```
+
