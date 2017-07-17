@@ -29,7 +29,6 @@ function parseAndRun( content_, style_, gpu_, preserveColor_, alpha_, styleInter
     if opt.alpha == nil then opt.alpha = 1 end
     if opt.styleInterpWeights == nil then opt.styleInterpWeights = '' end
     if opt.mask == nil then opt.mask = '' end
-    print(opt)
 
     return runTest(opt)
 end
@@ -111,7 +110,6 @@ function runTest(opt)
         return decoder:forward(targetFeature)
     end
 
-    print('Creating save folder at ' .. opt.outputDir)
     paths.mkdir(opt.outputDir)
 
     if opt.mask ~= '' then
@@ -139,8 +137,6 @@ function runTest(opt)
 
     local numContent = #contentPaths
     local numStyle = #stylePaths
-    print("# Content images: " .. numContent)
-    print("# Style images: " .. numStyle)
 
     for i=1,numContent do
         local contentPath = contentPaths[i]
@@ -180,7 +176,6 @@ function runTest(opt)
             local output = styleTransfer(contentImg, styleImg)
 
             local savePath = paths.concat(opt.outputDir, contentName .. '_stylized_' .. styleName .. '.' .. opt.saveExt)
-            print('Output image saved at: ' .. savePath)
             image.save(savePath, output)
 
             if opt.saveOriginal then
