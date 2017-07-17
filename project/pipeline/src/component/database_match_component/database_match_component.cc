@@ -42,7 +42,6 @@ void DatabaseMatchComponent::process(RequestStatusPointer request) {
         default:
             Log::error("Invalid Request Type");
     }
-    filename = root_dir_ + "/" + filename;
     request->image_db = std::make_shared<ImageDataBase>();
-    request->image_db->load_tsv(filename.c_str());
+    request->image_db->load_tsv(root_dir_, filename);
 }

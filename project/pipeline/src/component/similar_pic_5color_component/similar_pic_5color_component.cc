@@ -48,6 +48,6 @@ void SimilarPic5colorComponent::process(RequestStatusPointer request) {
         }
     }
     request->ref_attr = image_attr_vec_pointer[selected_attr_index];
-    request->ref_img = cv::imread(request->ref_attr->filename.c_str(), 1);
+    request->ref_img = request->image_db->read_image(selected_attr_index);
 }
 
