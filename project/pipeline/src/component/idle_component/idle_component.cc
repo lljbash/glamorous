@@ -10,6 +10,6 @@ ComponentPointer IdleComponentFactory::create(std::string name) {
 
 IdleComponent::IdleComponent(std::string name) : Component(name) {}
 
-void SimpleComponent::process(RequestStatusPointer request) {
+void IdleComponent::process(RequestStatusPointer request) {
     
 }
