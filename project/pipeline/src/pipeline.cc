@@ -23,7 +23,6 @@ void Pipeline::start_serial(WaitQueuePointer output,
     for (RequestStatusPointer request : requests) {
         component_list_[0]->push_request(request);
     }
-    component_list_[0]->push_request(nullptr);
     Log::info("Start serial.");
     while (true) {
         bool all_free = true;
@@ -31,6 +30,7 @@ void Pipeline::start_serial(WaitQueuePointer output,
             const ComponentPointer &cp = component_list_[i];
             if (!cp->is_free()) {
                 all_free = false;
+                cp->push_request(nullptr);
                 cp->start(i == component_list_.size() - 1 ? output : nullptr);
             }
         }
@@ -70,5 +70,8 @@ void Pipeline::stop_parallel() {
         return;
     }
     Log::info("Stopping parallel.");
-    new_request(nullptr);
+    for (ComponentPointer cp : component_list_) {
+        cp->push_request(nullptr);
+    }
 }
+

@@ -8,8 +8,18 @@
 namespace glamorous {
 
 struct RequestStatus {
+    enum RequestType {
+        Abstract = 0,
+        Impressionism,
+        Pointillism,
+        PostImpressionism,
+        Shuimo,
+        Suprematism
+    };
+    
     std::string id;
-    std::string request_type;
+    RequestType request_type;
+    std::string text;
     
     ImageDataBasePointer image_db;
     

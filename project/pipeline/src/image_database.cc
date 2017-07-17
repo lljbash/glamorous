@@ -3,11 +3,13 @@
 
 using namespace glamorous;
 
-int ImageDataBase::load_tsv(const char* filename) {
+int ImageDataBase::load_tsv(std::string db_path, std::string filename) {
+    filename = db_path + "/" + filename;
+    db_path_ = db_path;
     std::ifstream in(filename);
     std::vector<std::vector<std::string>> strlist;
     if (!in.is_open()) {
-        Log::error("Failed to open %s", filename);
+        Log::error("Failed to open %s", filename.c_str());
         return OPEN_FAIL;
     }
     else {
@@ -29,10 +31,10 @@ int ImageDataBase::load_tsv(const char* filename) {
         }
     }
     in.close();
-    Log::info("Successfully open %s", filename);
+    Log::info("Successfully open %s", filename.c_str());
 
     for (std::vector<std::string> slist : strlist) {
-        if (slist.size() < 45) {
+        if (slist.size() < 28) {
             Log::error("Invalid Input : too few args");
             continue;
         }
@@ -59,12 +61,12 @@ int ImageDataBase::load_tsv(const char* filename) {
         ia.texture_complexity[1] = atof(slist[27].c_str());
 
         // shape
-        for (int i = 0; i < 14; i++) {
-            ia.shape_match[i] = atof(slist[29 + i].c_str());
-        }
+        /*for (int i = 0; i < 14; i++) {*/
+            //ia.shape_match[i] = atofslist[29 + i].c_str());
+        //}
 
-        ia.shape_big = stoi(slist[43]);
-        ia.shape_small = stoi(slist[44]);
+        //ia.shape_big = stoi(slist[43]);
+        /*ia.shape_small = stoi(slist[44]);*/
 
         img_list_.push_back(ia);
     }
@@ -75,3 +77,8 @@ int ImageDataBase::load_tsv(const char* filename) {
 const std::vector<ImageAttr> &ImageDataBase::get_image_list() const {
     return img_list_;
 }
+
+cv::Mat ImageDataBase::read_image(int index) const {
+    return cv::imread(std::string(db_path_ + "/" + img_list_.at(index).filename).c_str(), 1);
+}
+

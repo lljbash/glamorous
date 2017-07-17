@@ -10,41 +10,50 @@ int main(int argc, char const *argv[]) {
     Log::info("hello");
     
     ColorTransferComponentFactory ctcf(0.8);
-    ComponentPointer cp = ctcf.create();
+    ComponentPointer cp_hsv = ctcf.create();
     MeanContrastTransferComponentFactory mctcf;
-    ComponentPointer cp2 = mctcf.create();
+    ComponentPointer cp_mc = mctcf.create();
+    OilpaintTransferComponentFactory otcf;
+    ComponentPointer cp_oil = otcf.create();
+    ColorAttributeExtractorComponentFactory caecf;
+    ComponentPointer cp_ce = caecf.create();
+    SimilarPic5colorComponentFactory sp5cf;
+    ComponentPointer cp_5c = sp5cf.create();
+    DatabaseMatchComponentFactory dmcf("../../../data");
+    ComponentPointer cp_dm = dmcf.create();
+    InkTransferComponentFactory itcf;
+    ComponentPointer cp_ink = itcf.create();
+    IdleComponentFactory icf;
+    ComponentPointer cp_idle1 = icf.create("Idle1");
+    ComponentPointer cp_idle2 = icf.create("Idle2");
+    
+    std::vector<ComponentPointer> cps = {cp_dm, cp_ce, cp_5c, cp_hsv, cp_mc, cp_idle1, cp_oil, cp_ink, cp_idle2};
+    cp_dm->set_next_component(cp_ce);
+    cp_ce->set_next_component(cp_5c);
+    cp_5c->set_next_component(cp_hsv);
+    cp_hsv->set_next_component(cp_mc);
+    cp_mc->set_next_component(cp_idle1);
+    cp_idle1->set_next_component_func([&cp_ink, &cp_oil](RequestStatusPointer rsp) {
+        return rsp->request_type == RequestStatus::RequestType::Shuimo ? cp_ink : cp_oil;
+    });
+    cp_oil->set_next_component(cp_idle2);
+    cp_ink->set_next_component(cp_idle2);
     
     RequestStatusPointer rs = std::make_shared<RequestStatus>();
     
-    rs->src_img = cv::imread("../../lab/color/a.jpg");
+    rs->src_img = cv::imread("../../../b.jpg");
     rs->res_img = rs->src_img.clone();
     
-    rs->src_attr.saturation_mean = 0.38143;
-    rs->src_attr.saturation_contrast = 0.107267;
-    rs->src_attr.brightness_mean = 0.738516;
-    rs->src_attr.brightness_contrast = 0.217394;
-
-    rs->ref_attr.saturation_mean = 0.231219;
-    rs->ref_attr.saturation_contrast = 0.114508;
-    rs->ref_attr.brightness_mean = 0.555568;
-    rs->ref_attr.brightness_contrast = 0.197405;
-    
-    int five[5][3] = {{216, 175, 157}, {154, 170, 168}, {106, 113, 113}, {96, 108, 99}, {79, 76, 58}};
-    for (int i = 0; i < 5; i++) {
-        for (int j = 0; j < 3; j++) {
-            rs->ref_attr.five_color[i][j] = five[i][j];
-        }
-    }
+    rs->request_type = RequestStatus::RequestType::Shuimo;
     
     Pipeline p;
     auto output = std::make_shared<Component::WaitQueue>();
-    p.set_static_pipeline({cp, cp2});
-    p.start_parallel(output);
-    p.new_request(rs);
-    p.stop_parallel();
+    p.set_custom_pipeline(cps);
+    p.start_serial(output, {rs});
     RequestStatusPointer rso;
     output->wait_and_pop(rso);
     
-    cv::imwrite("color.jpg", rso->res_img);
+    cv::imwrite("res.jpg", rso->res_img);
+    cv::imwrite("color_ref.jpg", rso->ref_img);
     return 0;
 }
