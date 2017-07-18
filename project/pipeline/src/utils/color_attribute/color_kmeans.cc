@@ -66,7 +66,7 @@ cv::Vec3b ColorKMeans::deal_with_void_cluster() const {
             index = i;
         }
     }
-    return points[i].clone();
+    return points[index].clone();
 }
 
 bool ColorKMeans::single_step_cluster() {
@@ -91,11 +91,11 @@ bool ColorKMeans::single_step_cluster() {
         id_size.emplace_back(i, all_clusters[i].size());
     }
     auto cmp = [](const IdSize &a, const IdSize &b) {
-        return std::get<size_t>(a) > std::get<size_t>(b);
+        return std::get<1>(a) > std::get<1>(b);
     };
     std::sort(id_size.begin(), id_size.end(), cmp);
     for (int i = 0; i < k; i++) {
-        new_cluster_centers_.push_back(get_center(all_clusters[std::get<int>(id_size[i])]));
+        new_cluster_centers_.push_back(get_center(all_clusters[std::get<0>(id_size[i])]));
     }
     bool ifChange = false;
     for (int i = 0; i < k; i++) {
