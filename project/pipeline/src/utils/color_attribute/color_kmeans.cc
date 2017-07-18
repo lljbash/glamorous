@@ -27,7 +27,7 @@ std::vector<cv::Vec3b> ColorKMeans::get_cluster() const {
     return cluster_centers_;
 }
 
-double ColorKMeans::get_lab_distance(const cv::Vec3b &a, const cv::Vec3b &b) {
+double ColorKMeans::get_lab_distance(const cv::Vec3b &a, const cv::Vec3b &b) const {
     constexpr auto sqr = [](double a) -> double { return a * a; };
     constexpr double wL = (100. / 255.) * (100. / 255.);
     double result = sqrt(sqr(a[0] - b[0]) * wL + sqr(a[1] - b[1]) + sqr(a[2] - b[2]));
@@ -66,7 +66,7 @@ cv::Vec3b ColorKMeans::deal_with_void_cluster() const {
             index = i;
         }
     }
-    return points[index].clone();
+    return points_[index].clone();
 }
 
 bool ColorKMeans::single_step_cluster() {
