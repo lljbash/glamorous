@@ -43,7 +43,13 @@ cv::Vec3b ColorKMeans::get_center(const std::vector<cv::Vec3b> &cluster) {
         a += point[1];
         b += point[2];
     }
-    return cv::Vec3b(L / weight, a / weight, b/ weight);
+    if (weight != 0) {
+        return cv::Vec3b(L / weight, a / weight, b/ weight);
+    }
+    else {
+        // TODO: more science!
+        return cv::Vec3b(127, 50, 50); // magic
+    }
 }
 
 bool ColorKMeans::single_step_cluster() {
