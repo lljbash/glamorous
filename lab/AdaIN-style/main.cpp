@@ -7,7 +7,7 @@ using namespace std;
 
 int main() {
     StyleTrans st("aaaaa");
-    st.initialize("input/content/aaaaa.jpg", "input/style/shuimo3_g.jpg");
+    st.initialize("/home/lljbash/b.jpg", "/home/lljbash/data/shuimo/caimo/11-14060Q0223EX.jpg");
     st.apply();
     Mat res = st.get_dst();
     imshow("Res", res);

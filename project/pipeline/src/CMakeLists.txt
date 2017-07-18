@@ -1,5 +1,5 @@
 file(GLOB_RECURSE source_list "*.cc")
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 add_library(glamorous_pipeline STATIC ${source_list})
-target_link_libraries(glamorous_pipeline glamorous_matlab_ink ${OpenCV_LIBS})
+target_link_libraries(glamorous_pipeline glamorous_matlab_ink ${OpenCV_LIBS} luajit)
 add_dependencies(glamorous_pipeline glamorous_matlab_ink)

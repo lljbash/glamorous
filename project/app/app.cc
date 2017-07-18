@@ -52,27 +52,30 @@ void GlamorousApp::initialize(const char *db_path) {
     Log::info("Initializing...");
     
     ColorTransferComponentFactory ctcf(0.8);
-    ComponentPointer cp_hsv = ctcf.create();
     MeanContrastTransferComponentFactory mctcf;
-    ComponentPointer cp_mc = mctcf.create();
     OilpaintTransferComponentFactory otcf;
-    ComponentPointer cp_oil = otcf.create();
     ColorAttributeExtractorComponentFactory caecf;
-    ComponentPointer cp_ce = caecf.create();
     SimilarPic5colorComponentFactory sp5cf;
-    ComponentPointer cp_5c = sp5cf.create();
     DatabaseMatchComponentFactory dmcf(db_path);
-    ComponentPointer cp_dm = dmcf.create();
     InkTransferComponentFactory itcf;
-    ComponentPointer cp_ink = itcf.create();
     IdleComponentFactory icf;
+    StyleTransferComponentFactory stcf;
+    ComponentPointer cp_hsv = ctcf.create();
+    ComponentPointer cp_mc = icf.create();
+    ComponentPointer cp_oil = otcf.create();
+    ComponentPointer cp_ce = caecf.create();
+    ComponentPointer cp_5c = sp5cf.create();
+    ComponentPointer cp_dm = dmcf.create();
+    ComponentPointer cp_ink = itcf.create();
     ComponentPointer cp_idle1 = icf.create("Idle1");
     ComponentPointer cp_idle2 = icf.create("Idle2");
+    ComponentPointer cp_st = stcf.create();
     
-    cps_ = {cp_dm, cp_ce, cp_5c, cp_hsv, cp_mc, cp_idle1, cp_oil, cp_ink, cp_idle2};
+    cps_ = {cp_dm, cp_ce, cp_5c, cp_st, cp_hsv, cp_mc, cp_idle1, cp_oil, cp_ink, cp_idle2};
     cp_dm->set_next_component(cp_ce);
     cp_ce->set_next_component(cp_5c);
-    cp_5c->set_next_component(cp_hsv);
+    cp_5c->set_next_component(cp_st);
+    cp_st->set_next_component(cp_hsv);
     cp_hsv->set_next_component(cp_mc);
     cp_mc->set_next_component(cp_idle1);
     cp_idle1->set_next_component_func([cp_ink, cp_oil](RequestStatusPointer rsp) {

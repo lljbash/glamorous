@@ -2,6 +2,7 @@
 
 #include <cstdio>
 #include <lua.hpp>
+#include "log.h"
 
 using namespace glamorous;
 using namespace std;
@@ -50,8 +51,7 @@ int StyleTrans::apply() {
     L = luaL_newstate();
     luaL_openlibs(L);
     if (luaL_dofile(L, "lua-style/testFromCpp.lua") != 0) {
-        printf("Load Error! %s\n", lua_tostring(L, -1));
-        // Log::error("Loadfile Error! " + lua_tostring(L, -1));
+        Log::error("Loadfile Error! %s", lua_tostring(L, -1));
     }
     luaL_openlibs(L);
 
@@ -60,8 +60,7 @@ int StyleTrans::apply() {
     lua_pushstring(L, prefix_.c_str());
     lua_pushinteger(L, gpu_?0:-1);
     if (lua_pcall(L, 2, 0, 0) != 0) {
-        printf("Call Error! %s\n", lua_tostring(L, -1));
-        // Log::error("Call Function Error! " + lua_tostring(L, -1));
+        Log::error("Call Function Error! %s", lua_tostring(L, -1));
         return -1;
     }
 

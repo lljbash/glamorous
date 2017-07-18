@@ -2,8 +2,8 @@ require 'torch'
 require 'nn'
 require 'image'
 require 'paths'
-require 'lib/AdaptiveInstanceNormalization'
-require 'lib/utils'
+require 'lualib/AdaptiveInstanceNormalization'
+require 'lualib/utils'
 
 function parseAndRun( prefix_, gpu_, preserveColor_, alpha_, styleInter_, mask_ )
     local opt = {
@@ -12,13 +12,13 @@ function parseAndRun( prefix_, gpu_, preserveColor_, alpha_, styleInter_, mask_ 
         style = prefix_..'-style.jpg',
         vgg = 'models/vgg_normalised.t7',
         decoder = 'models/decoder.t7',
-        contentSize = 0,
-        styleSize = 0,
+        contentSize = 256,
+        styleSize = 128,
         -- contentSize = 512,
         -- styleSize = 512,
         crop = false,
         gpu = gpu_,
-        outputDir = 'build',
+        outputDir = '.',
         saveOriginal = false,
         preserveColor = preserveColor_,
         alpha = alpha_,

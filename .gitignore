@@ -1,9 +1,10 @@
 build/
 bin/
 .tags*
-.jpg
-.png
-.jpeg
+*.jpg
+*.png
+*.jpeg
+*.t7
 __pycache__/
 
 # Compiled source #

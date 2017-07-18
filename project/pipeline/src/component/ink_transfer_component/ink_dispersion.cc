@@ -67,7 +67,7 @@ int InkDispersion::run_main(int argc, const char **argv)
         int c = src_.channels();
         mwArray imgArray;
         if (c == 3) {
-            mwSize dims[3] = {s.height, s.width, c};
+            mwSize dims[3] = {static_cast<mwSize>(s.height), static_cast<mwSize>(s.width), static_cast<mwSize>(c)};
             imgArray = mwArray(c, dims, mxUINT8_CLASS, mxREAL);
             for (int i = 0; i < s.height; i++) {
                 for (int j = 0; j < s.width; j++) {

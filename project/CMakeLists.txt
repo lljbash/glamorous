@@ -13,9 +13,11 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 link_directories(/usr/local/MATLAB/R2017a/runtime/glnxa64)
 link_directories(/usr/local/MATLAB/R2017a/bin/glnxa64)
 link_directories(${CMAKE_SOURCE_DIR}/pipeline/non-cpp/matlab/ink)
+link_directories(~/torch/install/lib)
 
 include_directories(/usr/local/MATLAB/R2017a/extern/include)
 include_directories(${CMAKE_SOURCE_DIR}/pipeline/include)
+include_directories(~/torch/install/include)
 
 add_subdirectory(pipeline)
 add_subdirectory(app)

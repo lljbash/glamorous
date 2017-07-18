@@ -16,5 +16,7 @@ void InkTransferComponent::process(RequestStatusPointer request) {
     InkDispersion id;
     id.initialize(request->res_img);
     id.apply();
-    request->res_img = id.get_dst();
+    cv::Mat dst = id.get_dst();
+    cv::cvtColor(dst, dst, CV_BGR2GRAY);
+    request->res_img = dst.clone();
 }

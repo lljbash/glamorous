@@ -5,20 +5,23 @@ from django.shortcuts import render_to_response
 from django.views.decorators.csrf import csrf_exempt
 from PIL import Image
 
-import app;
+from ctypes import byref, cdll, c_int
+import ctypes
+lualib = ctypes.CDLL("/home/lljbash/torch/install/lib/libluajit.so", mode=ctypes.RTLD_GLOBAL)
+import app
 
 import urllib
 # import urllib2
 
 global content
 global style
-myapp = app.GlamorousApp()
-myapp.initialize('/home/lljbash/data')
 
 def homepage(request):
     
     global content
     global style
+    myapp = app.GlamorousApp()
+    myapp.initialize('/home/lljbash/data')
     content = request.GET.get("content")
     style = request.GET.get("style")
 
