@@ -27,11 +27,11 @@ void SimilarPic5colorComponent::process(RequestStatusPointer request) {
     int length = image_attr_vec_pointer.size();
     for (int i = 0; i < length; ++i) {
     	float distance = 0;
-	    for (int j=0; j<5; j++) {
+	    for (int j = 0; j < 5; j++) {
 	        cv::Vec3f a_bgr = cv::Vec3f(
-	        	image_attr_vec_pointer[j].five_color[j][2],
-	        	image_attr_vec_pointer[j].five_color[j][1],
-	        	image_attr_vec_pointer[j].five_color[j][0]);
+	        	image_attr_vec_pointer[i].five_color[j][2],
+	        	image_attr_vec_pointer[i].five_color[j][1],
+	        	image_attr_vec_pointer[i].five_color[j][0]);
 
 	        cv::Vec3f b_bgr = cv::Vec3f(
 	        	request->src_attr.five_color[j][2],
