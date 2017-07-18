@@ -19,6 +19,11 @@ public:
     ComponentPointer create(std::string name = "IdleComponent") override;
 };
 
+class StyleTransferComponentFactory : ComponentFactory {
+public:
+    ComponentPointer create(std::string name = "StyleTransferComponent") override;
+};
+
 class ColorTransferComponentFactory : ComponentFactory {
 public:
     ColorTransferComponentFactory(float level = 0.4);
