@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <limits>
+#include <tuple>
 
 using namespace glamorous;
 
@@ -47,9 +48,25 @@ cv::Vec3b ColorKMeans::get_center(const std::vector<cv::Vec3b> &cluster) {
         return cv::Vec3b(L / weight, a / weight, b/ weight);
     }
     else {
-        // TODO: more science!
-        return cv::Vec3b(127, 50, 50); // magic
+        cv::Vec3b new_center = deal_with_void_cluster();
+        return new_center;
     }
+}
+
+cv::Vec3b ColorKMeans::deal_with_void_cluster() const {
+    double max_distance = 0.;
+    int index = 0;
+    for (int i = 0; i < points_.size(); i++) {
+        double distance = 0.;
+        for (cv::Vec3b cluster_center : cluster_centers_) {
+            distance += get_lab_distance(points_[i], cluster_center);
+        }
+        if (distance > max_distance) {
+            max_distance = distance;
+            index = i;
+        }
+    }
+    return points[i].clone();
 }
 
 bool ColorKMeans::single_step_cluster() {
@@ -68,8 +85,17 @@ bool ColorKMeans::single_step_cluster() {
         all_clusters[index].push_back(point);
     }
     std::vector<cv::Vec3b> new_cluster_centers_;
+    using IdSize = std::tuple<int, size_t>;
+    std::vector<IdSize> id_size;
     for (int i = 0; i < k; i++) {
-        new_cluster_centers_.push_back(get_center(all_clusters[i]));
+        id_size.emplace_back(i, all_clusters[i].size());
+    }
+    auto cmp = [](const IdSize &a, const IdSize &b) {
+        return std::get<size_t>(a) > std::get<size_t>(b);
+    };
+    std::sort(id_size.begin(), id_size.end(), cmp);
+    for (int i = 0; i < k; i++) {
+        new_cluster_centers_.push_back(get_center(all_clusters[std::get<int>(id_size[i])]));
     }
     bool ifChange = false;
     for (int i = 0; i < k; i++) {
