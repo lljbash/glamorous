@@ -5,10 +5,11 @@ require 'paths'
 require 'lib/AdaptiveInstanceNormalization'
 require 'lib/utils'
 
-function parseAndRun( content_, style_, gpu_, preserveColor_, alpha_, styleInter_, mask_ )
+function parseAndRun( prefix_, gpu_, preserveColor_, alpha_, styleInter_, mask_ )
     local opt = {
-        content = content_,
-        style = style_,
+        prefix = prefix_,
+        content = prefix_.."-content.jpg",
+        style = prefix_..'-style.jpg',
         vgg = 'models/vgg_normalised.t7',
         decoder = 'models/decoder.t7',
         contentSize = 0,
@@ -16,9 +17,8 @@ function parseAndRun( content_, style_, gpu_, preserveColor_, alpha_, styleInter
         -- contentSize = 512,
         -- styleSize = 512,
         crop = false,
-        saveExt = 'jpg',
         gpu = gpu_,
-        outputDir = 'tmp',
+        outputDir = 'build',
         saveOriginal = false,
         preserveColor = preserveColor_,
         alpha = alpha_,
@@ -175,7 +175,7 @@ function runTest(opt)
 
             local output = styleTransfer(contentImg, styleImg)
 
-            local savePath = paths.concat(opt.outputDir, contentName .. '_stylized_' .. styleName .. '.' .. opt.saveExt)
+            local savePath = paths.concat(opt.outputDir, opt.prefix .. '-dst.jpg')
             image.save(savePath, output)
 
             if opt.saveOriginal then

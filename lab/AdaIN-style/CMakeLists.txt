@@ -1,6 +1,12 @@
 cmake_minimum_required(VERSION 2.8)
 project( main )
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -g -Wall")
+
+IF (APPLE)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -g -Wall -pagezero_size 10000 -image_base 100000000")
+ELSE()
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -g -Wall")
+ENDIF()
+
 find_package( OpenCV REQUIRED )
 include_directories( ${OpenCV_INCLUDE_DIRS} ~/torch/install/include )
 link_directories( ~/torch/install/lib )

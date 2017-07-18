@@ -8,7 +8,7 @@ namespace glamorous {
 class StyleTrans {
 private:
     cv::Mat content_;
-    cv::Mat style_
+    cv::Mat style_;
     cv::Mat dst_;
 
     std::string prefix_;
@@ -26,7 +26,7 @@ public:
     void setGpu(bool gpu);
 
     void initialize(const cv::Mat &content, const cv::Mat &style);
-    void initialize(string &contentName, string &styleName);
+    void initialize(const std::string &contentName, const std::string &styleName);
     int apply();
 
     cv::Mat get_dst() const;

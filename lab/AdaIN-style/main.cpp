@@ -10,7 +10,7 @@ int main() {
     st.initialize("input/content/aaaaa.jpg", "input/style/shuimo3_g.jpg");
     st.apply();
     Mat res = st.get_dst();
-    imshow("Res", res)
+    imshow("Res", res);
     waitKey(0);
     return 0;
 }

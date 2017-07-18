@@ -1,5 +1,6 @@
 #include "style_trans.h"
 
+#include <cstdio>
 #include <lua.hpp>
 
 using namespace glamorous;
@@ -23,7 +24,7 @@ void StyleTrans::setGpu(bool gpu) {
     gpu_ = gpu;
 }
 
-void StyleTrans::initialize(string &contentName, string &styleName) {
+void StyleTrans::initialize(const string &contentName, const string &styleName) {
     contentName_ = contentName;
     styleName_ = styleName;
     content_ = imread(contentName_);
@@ -36,8 +37,8 @@ void StyleTrans::initialize(const Mat &content, const Mat &style) {
 }
 
 int StyleTrans::apply() {
-    contentName_ = prefix_ + "content.jpg";
-    styleName_ = prefix_ + "style.jpg";
+    contentName_ = prefix_ + "-content.jpg";
+    styleName_ = prefix_ + "-style.jpg";
 
     imwrite(contentName_, content_);
     imwrite(styleName_, style_);
@@ -47,21 +48,24 @@ int StyleTrans::apply() {
     L = luaL_newstate();
     luaL_openlibs(L);
     if (luaL_dofile(L, "testFromCpp.lua") != 0) {
+        printf("Load Error! %s\n", lua_tostring(L, -1));
         // Log::error("Loadfile Error! " + lua_tostring(L, -1));
     }
     luaL_openlibs(L);
 
     // Call parseOpt & runTest
     lua_getglobal(L, "parseAndRun");
-    lua_pushstring(L, contentName_);
-    lua_pushstring(L, styleName_);
+    lua_pushstring(L, prefix_.c_str());
     lua_pushinteger(L, gpu_?0:-1);
-    if (lua_pcall(L, 3, 0, 0) != 0) {
+    if (lua_pcall(L, 2, 0, 0) != 0) {
+        printf("Call Error! %s\n", lua_tostring(L, -1));
         // Log::error("Call Function Error! " + lua_tostring(L, -1));
+        return -1;
     }
 
-    dstName_ = prefix_ + "dst.jpg";
+    dstName_ = prefix_ + "-dst.jpg";
     dst_ = imread(dstName_);
+    return 0;
 }
 
 Mat StyleTrans::get_dst() const {
