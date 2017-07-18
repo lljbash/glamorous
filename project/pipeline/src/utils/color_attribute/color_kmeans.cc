@@ -56,7 +56,7 @@ cv::Vec3b ColorKMeans::get_center(const std::vector<cv::Vec3b> &cluster) {
 cv::Vec3b ColorKMeans::deal_with_void_cluster() const {
     double max_distance = 0.;
     int index = 0;
-    for (int i = 0; i < points_.size(); i++) {
+    for (int i = 0; i < static_cast<int>(points_.size()); i++) {
         double distance = 0.;
         for (cv::Vec3b cluster_center : cluster_centers_) {
             distance += get_lab_distance(points_[i], cluster_center);
@@ -66,7 +66,7 @@ cv::Vec3b ColorKMeans::deal_with_void_cluster() const {
             index = i;
         }
     }
-    return points_[index].clone();
+    return points_[index];
 }
 
 bool ColorKMeans::single_step_cluster() {
