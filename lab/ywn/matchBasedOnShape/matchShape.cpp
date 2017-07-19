@@ -1,6 +1,7 @@
 #include "opencv2/opencv.hpp"
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <vector>
 #include <string>
 #include <stdio.h>
@@ -10,11 +11,7 @@
 #include <unistd.h>
 
 using namespace cv;
-using std::cout;
-using std::endl;
-using std::ifstream;
-using std::vector;
-using std::string;
+using namespace std;
 
 const string attCutPath = "../imgsaliency/pyimgsaliency/photo2sketch.py";
 const string databasePath = "./database/";
@@ -40,8 +37,6 @@ string getRCCImg(const string& path)
 void getFiles( string path, vector<string>& files )  
 { 
     const char* basePath = path.c_str();
-
-    // cout << "BASE PATH: " << basePath << endl;
 
     DIR *dir;
     struct dirent *ptr;
@@ -130,35 +125,25 @@ void showBestMatch(const string& srcRCCPath, const string& bestMatchPath)
 	waitKey(0);
 }
 
-
-int main(int argc, char* argv[])
+string getImgBasedOnShape(const string& path, const int& styleIndex)
 {
-	/*
-	TODO: 
-		1. argc, argv -> srcPath, styleSelector 	
-		2. if we failed to get the figure from srcPath(that's equal to bestMatchRaio == 0), 
-		   maybe we should select a random one rather than the first one.
-	*/
-
-	string srcPath = "./aaa.jpg";
-	int styleSelector = 4; // 0 - 5
+	string srcPath = path;
+	int styleSelector = styleIndex; // 0 - 5
 	string styleFolder = (databasePath + styleName[styleSelector]);
 	cout << styleFolder << endl;
 
 	Mat src;   
-	src=  imread(srcPath.c_str(), CV_LOAD_IMAGE_COLOR);    
+	src =  imread(srcPath.c_str(), CV_LOAD_IMAGE_COLOR);    
     if(!src.data)
     {  
          cout<<"Could not open or find the image"<< endl;  
-         return -1;  
+         exit(-1);  
     }  
 
 	// get RCC image
 	string srcRCCPath = getRCCImg(srcPath);
  //   Mat srcRcc=  imread(RCCPath.c_str(), CV_LOAD_IMAGE_COLOR);    
 	cout << "SRC RCC: " << srcRCCPath << endl;
-
-	
     
 	double bestMatchRatio = -1;
 	string bestMatchPath = "";
@@ -201,12 +186,27 @@ int main(int argc, char* argv[])
 		}
 	}
 
+/*
 	cout << "\n\n-------------------------\n"
 		 << "BEST MATCH: " << bestMatchPath << endl
 		 << "-------------------------\n";
 
 	cout << srcRCCPath << ", " << bestMatchPath << endl;
 	showBestMatch(srcRCCPath, bestMatchPath);  
-  
-    return 0;  
+*/
+
+	return bestMatchPath;
+}
+
+
+int main(int argc, char* argv[])
+{
+	string srcPath(argv[1]);
+	string styleStr(argv[2]);
+	int styleIndex = atoi(styleStr.c_str());
+
+	string bestMatchPath = getImgBasedOnShape(srcPath, styleIndex);
+	cout << "RET: " << bestMatchPath << endl;
+	 
+	return 0;
 }
