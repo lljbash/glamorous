@@ -60,6 +60,8 @@ void GlamorousApp::initialize(const char *db_path) {
     InkTransferComponentFactory itcf;
     IdleComponentFactory icf;
     StyleTransferComponentFactory stcf;
+    Photo2SketchComponentFactory p2scf;
+    
     ComponentPointer cp_hsv = ctcf.create();
     ComponentPointer cp_mc = icf.create();
     ComponentPointer cp_oil = otcf.create();
@@ -70,6 +72,7 @@ void GlamorousApp::initialize(const char *db_path) {
     ComponentPointer cp_idle1 = icf.create("Idle1");
     ComponentPointer cp_idle2 = icf.create("Idle2");
     ComponentPointer cp_st = stcf.create();
+    ComponentPointer cp_p2s = p2scf.create();
     
     cps_ = {cp_dm, cp_ce, cp_5c, cp_st, cp_hsv, cp_mc, cp_idle1, cp_oil, cp_ink, cp_idle2};
     cp_dm->set_next_component(cp_ce);
@@ -129,4 +132,3 @@ std::string GlamorousApp::transfer(const char *text, int type) {
     
     return std::string(rso->id + ".jpg");
 }
-

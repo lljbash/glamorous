@@ -70,4 +70,9 @@ public:
 	ComponentPointer create(std::string name = "SimilarPic5colorComponent") override;
 };
 
+class Photo2SketchComponentFactory : ComponentFactory {
+public:
+	ComponentPointer create(std::string name = "Photo2SketchComponent") override;
+};
+
 } // namespace glamorous
