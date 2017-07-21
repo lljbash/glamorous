@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <ctime>
 #include <cstdlib>
+#include <cmath>
 
 using namespace std;
 using namespace cv;
@@ -125,12 +126,93 @@ mPoint getNextPoint(mPoint& mp){
 	return mPoint(-1, -1, -1);
 }
 
+Mat genSketch(string fileName){
+	Mat src = imread(fileName, CV_LOAD_IMAGE_GRAYSCALE);
+	int rows = src.rows;
+	int cols = src.cols;
+	printf("in genSketch\n");
+	//灰度
+    // for(int i = 0;i < 1000;i ++)
+    //     for(int j = 0;j < 1000;j ++){
+    //         QRgb color = rawpic.pixel(i,j);
+    //         int average = (qRed(color) + qGreen(color) + qBlue(color)) / 3;
+    //         picmap[i][j] = average;
+    //     }
+    cv::imshow("src", src);
+    //反相
+    Mat mask = 255 * Mat::ones(rows, cols, CV_8UC1);
+    for(int i = 0;i < rows;i ++)
+        for(int j = 0;j < cols;j ++){
+        	mask.at<uchar>(i,j) = 255 - src.at<uchar>(i,j);
+        }
+
+    cv::imshow("mask", mask);
+
+    Mat minmap = 255 * Mat::ones(rows, cols, CV_8UC1);
+    //最小值
+    for(int i = 0;i < rows;i ++)
+        for(int j = 0;j < cols;j ++){
+            int minpix = 255;
+            for(int m = -2;m < 2;m ++)
+                for(int n = -2;n < 2;n ++){
+                    if(i + m < 0 || i + m >= rows || j + n < 0 || j + n >= cols)
+                        continue;
+                    if(mask.at<uchar>(i+m,j+n) < minpix){
+                        minpix = mask.at<uchar>(i+m,j+n);
+                    }
+                }
+            minmap.at<uchar>(i,j) = minpix;
+        }
+    cv::imshow("minmap", minmap);
+
+    Mat lightmap = 255 * Mat::ones(rows, cols, CV_8UC1);
+    //叠加
+    for(int i = 0;i < rows;i ++)
+        for(int j = 0;j < cols;j ++){
+            lightmap.at<uchar>(i,j) = src.at<uchar>(i,j) + (src.at<uchar>(i,j) * minmap.at<uchar>(i,j)) / (255 - minmap.at<uchar>(i,j));
+            if(lightmap.at<uchar>(i,j) > 255){
+                lightmap.at<uchar>(i,j) = 255;
+            }
+        }
+
+    cv::imshow("lightmap", lightmap);
+
+    //去噪
+    Mat res = 255 * Mat::ones(rows,cols, CV_8UC1);
+    for(int i = 0;i < rows;i ++)
+        for(int j = 0;j < cols;j ++){
+            int centerpix = lightmap.at<uchar>(i,j);
+            int num_same = 0;
+            for(int m = -1;m < 1;m ++)
+                for(int n = -1;n < 1;n ++){
+                    if(i + m < 0 || i + m >= rows || j + n < 0 || j + n >= cols){
+                    	num_same++;
+                        continue;
+                    }
+                    if(abs(mask.at<uchar>(i+m,j+n) - centerpix)<2){
+                        num_same++;
+                    }
+                }
+            if(num_same==9)	res.at<uchar>(i,j) = 255;
+            else res.at<uchar>(i,j) = lightmap.at<uchar>(i,j);
+            // minmap.at<uchar>(i,j) = minpix;
+        }
+    cv::imshow("res", res);
+    cv::waitKey();
+    return res;
+}
+
 int main(int argc, char* argv[])
 {
 	srand((unsigned int) time(0));
 
-	string srcPath(argv[1]);
-	_m = imread(srcPath, CV_LOAD_IMAGE_GRAYSCALE);
+	// string srcPath(argv[1]);
+	// _m = imread(srcPath, CV_LOAD_IMAGE_GRAYSCALE);
+
+	// read origin image and trans to sketch
+	_m = genSketch(string(argv[1]));
+	return 0;
+
 	vector<mPoint> pVec;
 	for (int i = 0; i < _m.rows; ++i)
 		for (int j = 0; j < _m.cols; ++j)
