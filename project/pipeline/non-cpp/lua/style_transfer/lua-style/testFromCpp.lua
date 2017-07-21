@@ -2,8 +2,8 @@ require 'torch'
 require 'nn'
 require 'image'
 require 'paths'
-require 'lib/AdaptiveInstanceNormalization'
-require 'lib/utils'
+require 'lualib/AdaptiveInstanceNormalization'
+require 'lualib/utils'
 
 function parseAndRun( prefix_, gpu_, preserveColor_, alpha_, styleInter_, mask_ )
     local opt = {

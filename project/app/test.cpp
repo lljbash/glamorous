@@ -8,9 +8,9 @@ int main(int argc, char const *argv[]) {
     GlamorousApp app;
     app.initialize("/home/lljbash/data");
     std::string name;
-    name = app.transfer("shabi", 2);
+    name = app.transfer("grass", 2);
     Log::info("Filename: %s", name.c_str());
-    name = app.transfer("liangliang", 4);
+    name = app.transfer("goldfish", 4);
     Log::info("Filename: %s", name.c_str());
     return 0;
 }

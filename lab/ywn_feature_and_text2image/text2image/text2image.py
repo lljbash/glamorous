@@ -12,7 +12,6 @@
 import time       #Importing the time library to check the time of code execution
 import sys    #Importing the System Library
 import os
-import urllib2
 
 
 total_image_number = 1
@@ -94,17 +93,6 @@ def text2image(text, image_path):
         print ("Evaluating...")
         search_keywords = search_keyword[i]
         search = search_keywords.replace(' ','%20')
-        
-         #make a search keyword  directory
-        try:
-            search_keywords = 'D:/SummerPractice/googleImage/google-images-download/' + search_keywords.replace(' ', '_')
-            #os.makedirs(search_keywords)
-        except OSError, e:
-            if e.errno != 17:
-                raise   
-            # time.sleep might help here
-            pass
-        
         j = 0
         while j<len(keywords):
             pure_keyword = keywords[j].replace(' ','%20')
@@ -117,12 +105,6 @@ def text2image(text, image_path):
         print ("Total Image Links = "+str(len(items)))
         print ("\n")
 
-
-        #This allows you to write all the links into a test file. This text file will be created in the same directory as your code. You can comment out the below 3 lines to stop writing the output to the text file.
-        info = open('output.txt', 'a')        #Open the text file called database.txt
-        info.write(str(i) + ': ' + str(search_keyword[i-1]) + ": " + str(items) + "\n\n\n")         #Write the title of the page
-        info.close()                            #Close the file
-
         t1 = time.time()    #stop the timer
         total_time = t1-t0   #Calculating the total time required to crawl, find and download all the links of 60,000 images
         print("Total time taken: "+str(total_time)+" Seconds")
@@ -134,14 +116,14 @@ def text2image(text, image_path):
         k=0
         errorCount=0
         while(k<len(items) and k < total_image_number):
-            from urllib2 import Request,urlopen
-            from urllib2 import URLError, HTTPError
+            from urllib.request import Request,urlopen
+            from urllib.request import URLError, HTTPError
 
             try:
                 req = Request(items[k], headers={"User-Agent": "Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.27 Safari/537.17"})
                 response = urlopen(req,None,15)
                 
-                print search_keywords+"/"+str(k+1)+".jpg"
+                print(search_keywords+"/"+str(k+1)+".jpg")
                 output_file = open(image_path,'wb')
 
                 
