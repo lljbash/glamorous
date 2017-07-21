@@ -1,7 +1,7 @@
 function [ img2 ] = inkdisp( img, lambda, alpha, canny )
 %INKDSIP 墨水扩散
 %   墨水扩散函数
-%   推荐 lambda 0.02 alpha 0.8 canny 0.3
+%   推荐 lambda 0.5 alpha 0.5 canny 0.05
 
 [R, C, ~] = size(img);
 lab = rgb2lab(img);
