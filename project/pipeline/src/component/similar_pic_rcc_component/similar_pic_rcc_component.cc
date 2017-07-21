@@ -12,7 +12,7 @@ SimilarPicRccComponent::SimilarPicRccComponent(std::string name) : Component(nam
 
 void SimilarPicRccComponent::process(RequestStatusPointer request) {
     const std::vector<ImageAttr>& image_attr_vec_pointer = request->image_db->get_image_list();
-    cv::Mat rcc = cv::imread(request->src_attr.rcc_filename.c_str(), 0);
+    cv::Mat rcc = request->res_rcc_img;
     int length = image_attr_vec_pointer.size();
     
     int selected_attr_index = 0;

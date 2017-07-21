@@ -21,5 +21,6 @@ void Photo2SketchComponent::process(RequestStatusPointer request) {
     Py_Initialize();
     initphoto2sketch();
     photo2sketch(request->src_attr.filename.c_str(), request->src_attr.rcc_filename.c_str());
+    request->res_rcc_img = cv::imread(request->src_attr.rcc_filename.c_str());
     Py_Finalize();
 }

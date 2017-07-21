@@ -25,6 +25,7 @@ struct RequestStatus {
     
     cv::Mat src_img;
     cv::Mat res_img;
+    cv::Mat res_rcc_img;
     cv::Mat ref_img;
     
     ImageAttr src_attr;
