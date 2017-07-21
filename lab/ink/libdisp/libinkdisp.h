@@ -1,9 +1,9 @@
 //
 // MATLAB Compiler: 6.4 (R2017a)
-// Date: Fri Jul 14 14:39:14 2017
+// Date: Fri Jul 21 18:40:53 2017
 // Arguments:
-// "-B""macro_default""-W""cpplib:libinkdisp""-T""link:lib""inkdisp.m""gptoolbox
-// /imageprocessing/lischinski.m""-d""libdisp"
+// "-B""macro_default""-W""cpplib:libinkdisp""-T""link:lib""inkdisp3.m""gptoolbo
+// x/imageprocessing/lischinski.m""-d""libdisp"
 //
 
 #ifndef __libinkdisp_h
@@ -75,7 +75,7 @@ extern LIB_libinkdisp_C_API
 void MW_CALL_CONV libinkdispPrintStackTrace(void);
 
 extern LIB_libinkdisp_C_API 
-bool MW_CALL_CONV mlxInkdisp(int nlhs, mxArray *plhs[], int nrhs, mxArray *prhs[]);
+bool MW_CALL_CONV mlxInkdisp3(int nlhs, mxArray *plhs[], int nrhs, mxArray *prhs[]);
 
 extern LIB_libinkdisp_C_API 
 bool MW_CALL_CONV mlxLischinski(int nlhs, mxArray *plhs[], int nrhs, mxArray *prhs[]);
@@ -110,7 +110,7 @@ bool MW_CALL_CONV mlxLischinski(int nlhs, mxArray *plhs[], int nrhs, mxArray *pr
 
 #endif
 
-extern LIB_libinkdisp_CPP_API void MW_CALL_CONV inkdisp(int nargout, mwArray& img2, const mwArray& img, const mwArray& lambda, const mwArray& alpha, const mwArray& canny);
+extern LIB_libinkdisp_CPP_API void MW_CALL_CONV inkdisp3(int nargout, mwArray& img2, const mwArray& img, const mwArray& lambda, const mwArray& alpha, const mwArray& canny);
 
 extern LIB_libinkdisp_CPP_API void MW_CALL_CONV lischinski(int nargout, mwArray& A, const mwArray& L, const mwArray& varargin);
 

@@ -2,8 +2,8 @@ libinkdispInitialize
 libinkdispInitializeWithHandlers
 libinkdispTerminate
 libinkdispPrintStackTrace
-mlxInkdisp
-inkdisp
+mlxInkdisp3
+inkdisp3
 mlxLischinski
 lischinski
 
