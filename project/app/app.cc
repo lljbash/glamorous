@@ -61,7 +61,7 @@ void GlamorousApp::initialize(const char *db_path) {
     IdleComponentFactory icf;
     StyleTransferComponentFactory stcf;
     Photo2SketchComponentFactory p2scf;
-    
+    Word2ImageComponentFactory w2icf;
     ComponentPointer cp_hsv = ctcf.create();
     ComponentPointer cp_mc = icf.create();
     ComponentPointer cp_oil = otcf.create();
@@ -73,9 +73,11 @@ void GlamorousApp::initialize(const char *db_path) {
     ComponentPointer cp_idle2 = icf.create("Idle2");
     ComponentPointer cp_st = stcf.create();
     ComponentPointer cp_p2s = p2scf.create();
+    ComponentPointer cp_w2i = w2icf.create();
     
-    cps_ = {cp_dm, cp_ce, cp_5c, cp_st, cp_hsv, cp_mc, cp_idle1, cp_oil, cp_ink, cp_idle2};
-    cp_dm->set_next_component(cp_ce);
+    cps_ = {cp_dm, cp_w2i, cp_ce, cp_5c, cp_st, cp_hsv, cp_mc, cp_idle1, cp_oil, cp_ink, cp_idle2};
+    cp_dm->set_next_component(cp_w2i);
+    cp_w2i->set_next_component(cp_ce);
     cp_ce->set_next_component(cp_5c);
     cp_5c->set_next_component(cp_st);
     cp_st->set_next_component(cp_hsv);
@@ -97,8 +99,7 @@ std::string GlamorousApp::transfer(const char *text, int type) {
     RequestStatusPointer rs = std::make_shared<RequestStatus>();
     
     rs->id = random_filename();
-    rs->src_img = cv::imread("/home/lljbash/b.jpg");
-    rs->res_img = rs->src_img.clone();
+    rs->text = std::string(text);
     
     switch (type) {
         case 1:
