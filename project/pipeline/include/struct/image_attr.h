@@ -14,7 +14,7 @@ struct ImageAttr {
     float brightness_contrast;
     float warm_cool;
     float clear_dull;
-    int five_color[5][3];
+    int five_color[5][3]; // RGB Color
 
     // figure ground
     float area_difference;

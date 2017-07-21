@@ -1,0 +1,10 @@
+Metadata-Version: 1.0
+Name: pyimgsaliency
+Version: 0.1
+Summary: A package for calculating image saliency
+Home-page: https://github.com/yhenon/pyimgsaliency
+Author: Yann Henon
+Author-email: none
+License: Apache
+Description: UNKNOWN
+Platform: UNKNOWN
