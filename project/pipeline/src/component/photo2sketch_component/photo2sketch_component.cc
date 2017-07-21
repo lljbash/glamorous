@@ -1,7 +1,8 @@
 #include "photo2sketch_component.h"
 
-#include <Python.h>
 #include <string>
+
+#include <Python.h>
 
 #include "component/component_factory.h"
 #include "log.h"
