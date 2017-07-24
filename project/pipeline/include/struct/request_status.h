@@ -28,6 +28,8 @@ struct RequestStatus {
     cv::Mat res_rcc_img;
     cv::Mat ref_img;
     
+    std::string video_name;
+    
     ImageAttr src_attr;
     ImageAttr ref_attr;
 };

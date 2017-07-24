@@ -7,7 +7,7 @@ using namespace glamorous;
 auto FiveColorExtractor::extract(const cv::Mat &image_bgr) const
         -> FiveColor {
     ColorKMeans ckm;
-    cv::Mat src = image_bgr;
+    cv::Mat src = image_bgr.clone();
     cv::cvtColor(src, src, CV_BGR2Lab);
     std::vector<cv::Vec3b> points;
     for (int i = 0; i < src.rows; i++) {

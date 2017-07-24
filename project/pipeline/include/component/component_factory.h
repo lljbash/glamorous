@@ -80,4 +80,9 @@ public:
 	ComponentPointer create(std::string name = "SimilarPicRccComponent") override;
 };
 
+class SketchVideoComponentFactory : ComponentFactory {
+public:
+	ComponentPointer create(std::string name = "SketchVideoComponent") override;
+};
+
 } // namespace glamorous
