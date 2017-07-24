@@ -6,7 +6,6 @@ namespace glamorous {
 
 struct ImageAttr {
     std::string filename;
-    std::string rcc_filename;
 
     // color pattern
     float saturation_mean;

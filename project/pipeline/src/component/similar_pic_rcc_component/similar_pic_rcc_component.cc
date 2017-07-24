@@ -18,16 +18,14 @@ void SimilarPicRccComponent::process(RequestStatusPointer request) {
     int selected_attr_index = 0;
     int maxSimilar = 0;
     for (int i = 0; i < length; ++i) {
-        std::string fname = image_attr_vec_pointer[i].filename;
-        std::string rname = fname.substr(0, fname.size() - 4) + "_RCC.png";
-        cv::Mat image = cv::imread(name.c_str(), 0);
+        cv::Mat image = request->image_db->read_rcc(i);
         cv::resize(image, image, rcc.size());
         
         int cntSimilar = 0;
-        for (int x = 0; x < rcc.cols; ++x) {
-            for (int y = 0; y < rcc.rows; ++y) {
-                int temp = (image.at(x, y) - 127) ^ (rcc.at(x, y) - 127);
-                if (temp < 0) {
+        for (int x = 0; x < rcc.rows; ++x) {
+            for (int y = 0; y < rcc.cols; ++y) {
+                int temp = (image.at<uchar>(x, y) > 127) ^ (rcc.at<uchar>(x, y) > 127);
+                if (temp == 0) {
                     cntSimilar++;
                 }
             }

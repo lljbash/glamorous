@@ -62,6 +62,7 @@ void GlamorousApp::initialize(const char *db_path) {
     StyleTransferComponentFactory stcf;
     Photo2SketchComponentFactory p2scf;
     Word2ImageComponentFactory w2icf;
+    SimilarPicRccComponentFactory sprcf;
     ComponentPointer cp_hsv = ctcf.create();
     ComponentPointer cp_mc = icf.create();
     ComponentPointer cp_oil = otcf.create();
@@ -74,13 +75,16 @@ void GlamorousApp::initialize(const char *db_path) {
     ComponentPointer cp_st = stcf.create();
     ComponentPointer cp_p2s = p2scf.create();
     ComponentPointer cp_w2i = w2icf.create();
+    ComponentPointer cp_prcc = sprcf.create();
     
-    cps_ = {cp_dm, cp_w2i, cp_ce, cp_5c, cp_st, cp_hsv, cp_mc, cp_idle1, cp_oil, cp_ink, cp_idle2};
+    cps_ = {cp_dm, cp_w2i, cp_p2s, cp_ce, cp_prcc, cp_st, cp_5c, cp_hsv, cp_mc, cp_idle1, cp_oil, cp_ink, cp_idle2};
     cp_dm->set_next_component(cp_w2i);
-    cp_w2i->set_next_component(cp_ce);
-    cp_ce->set_next_component(cp_5c);
-    cp_5c->set_next_component(cp_st);
-    cp_st->set_next_component(cp_hsv);
+    cp_w2i->set_next_component(cp_p2s);
+    cp_p2s->set_next_component(cp_ce);
+    cp_ce->set_next_component(cp_prcc);
+    cp_prcc->set_next_component(cp_st);
+    cp_st->set_next_component(cp_5c);
+    cp_5c->set_next_component(cp_hsv);
     cp_hsv->set_next_component(cp_mc);
     cp_mc->set_next_component(cp_idle1);
     cp_idle1->set_next_component_func([cp_ink, cp_oil](RequestStatusPointer rsp) {

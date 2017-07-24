@@ -75,4 +75,9 @@ public:
 	ComponentPointer create(std::string name = "Photo2SketchComponent") override;
 };
 
+class SimilarPicRccComponentFactory : ComponentFactory {
+public:
+	ComponentPointer create(std::string name = "SimilarPicRccComponent") override;
+};
+
 } // namespace glamorous

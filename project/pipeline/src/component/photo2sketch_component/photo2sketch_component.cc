@@ -17,10 +17,12 @@ ComponentPointer Photo2SketchComponentFactory::create(std::string name) {
 Photo2SketchComponent::Photo2SketchComponent(std::string name) : Component(name) {}
 
 void Photo2SketchComponent::process(RequestStatusPointer request) {
-    request->src_attr.rcc_filename = request->id + "_RCC.jpg";
+    std::string origin_filename = request->id + "_origin.jpg";
+    std::string rcc_filename = request->id + "_RCC.jpg";
+    cv::imwrite(origin_filename.c_str(), request->src_img);
     Py_Initialize();
     initphoto2sketch();
-    photo2sketch(request->src_attr.filename.c_str(), request->src_attr.rcc_filename.c_str());
-    request->res_rcc_img = cv::imread(request->src_attr.rcc_filename.c_str());
+    photo2sketch(origin_filename.c_str(), rcc_filename.c_str());
+    request->res_rcc_img = cv::imread(rcc_filename.c_str());
     Py_Finalize();
 }

@@ -1,0 +1,13 @@
+setup.py
+pyimgsaliency/__init__.py
+pyimgsaliency/binarise.py
+pyimgsaliency/demo.py
+pyimgsaliency/evaluate.py
+pyimgsaliency/photo2sketch.py
+pyimgsaliency/saliency.py
+pyimgsaliency/saliency_mbd.py
+pyimgsaliency.egg-info/PKG-INFO
+pyimgsaliency.egg-info/SOURCES.txt
+pyimgsaliency.egg-info/dependency_links.txt
+pyimgsaliency.egg-info/not-zip-safe
+pyimgsaliency.egg-info/top_level.txt

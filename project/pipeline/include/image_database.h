@@ -22,6 +22,7 @@ public:
     int load_tsv(std::string db_path, std::string filename);
     const std::vector<ImageAttr> &get_image_list() const;
     cv::Mat read_image(int index) const;
+    cv::Mat read_rcc(int index) const;
 
 private:
     std::vector<ImageAttr> img_list_;

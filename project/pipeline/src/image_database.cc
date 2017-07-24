@@ -82,3 +82,8 @@ cv::Mat ImageDataBase::read_image(int index) const {
     return cv::imread(std::string(db_path_ + "/" + img_list_.at(index).filename).c_str(), 1);
 }
 
+cv::Mat ImageDataBase::read_rcc(int index) const {
+    std::string name = img_list_.at(index).filename;
+    std::string rcc_name = name.substr(0, name.find_last_of('.')) + "_RCC.png";
+    return cv::imread(std::string(db_path_ + "/" + rcc_name).c_str(), 1);
+}
