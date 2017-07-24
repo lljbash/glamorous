@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <ctime>
 #include <cstdlib>
+#include <cmath>
 
 using namespace std;
 using namespace cv;
@@ -22,6 +23,7 @@ public:
 bool** isVisit;
 int cnt;
 Mat _m;
+vector<mPoint> line_global;
 
 
 bool cmp(const mPoint& a, const mPoint& b)
@@ -31,8 +33,11 @@ bool cmp(const mPoint& a, const mPoint& b)
 
 mPoint go(int x, int y, Mat& resMat, const int& NUM, int deep)
 {
+	
 	if (isVisit[x][y])
 		return mPoint(x,y,deep);
+	
+	line_global.push_back(mPoint(x,y,_m.at<uchar>(x,y)));
 
 	isVisit[x][y] = true;
 	resMat.at<uchar>(x, y) = _m.at<uchar>(x, y);
@@ -54,17 +59,73 @@ mPoint go(int x, int y, Mat& resMat, const int& NUM, int deep)
 
 	if (fooVec.size() == 0)
 		return mPoint(x, y, deep);
-	if (fooVec.size() > 1)
-		for (int i = 1; i < fooVec.size(); ++i)
-		{
-			isVisit[fooVec[i].x][fooVec[i].y] = true;
-			resMat.at<uchar>(fooVec[i].x, fooVec[i].y) = _m.at<uchar>(fooVec[i].x, fooVec[i].y);
-			++cnt;
-		}
+	// if (fooVec.size() > 1)
+	// 	for (int i = 1; i < fooVec.size(); ++i)
+	// 	{
+	// 		isVisit[fooVec[i].x][fooVec[i].y] = true;
+	// 		resMat.at<uchar>(fooVec[i].x, fooVec[i].y) = _m.at<uchar>(fooVec[i].x, fooVec[i].y);
+	// 		++cnt;
+	// 	}
 
 	return go(fooVec[0].x, fooVec[0].y, resMat, NUM, deep + 1);
 
 }
+
+void lineDiffuse(vector<mPoint>& line, int radius, int th, Mat& resMat){
+	vector<mPoint> edge = line;
+	int num_draw = 0;
+	// cout<<"line points: "<<edge.size()<<endl;
+	while(radius--){
+		if(edge.size()==0)	break;
+		vector<mPoint> tmp;
+		for(int i=0;i<edge.size();i++){
+			mPoint p = edge[i];
+			int x = p.x;
+			int y = p.y;
+			int g = p.gray;
+			// cout<<x<<","<<y<<":"<<g<<endl;
+			if(x+1 < _m.rows && (!isVisit[x+1][y]) && abs(_m.at<uchar>(x+1,y)-g)<th){
+				// down
+				isVisit[x+1][y] = true;
+				tmp.push_back(mPoint(x+1,y,_m.at<uchar>(x+1,y)));
+				resMat.at<uchar>(x+1,y) = _m.at<uchar>(x+1,y);
+				num_draw++;
+			}
+			if(x-1 >= 0 && (!isVisit[x-1][y]) && abs(_m.at<uchar>(x-1,y)-g)<th){
+				// up
+				isVisit[x-1][y] = true;
+				tmp.push_back(mPoint(x-1,y,_m.at<uchar>(x-1,y)));
+				resMat.at<uchar>(x-1,y) = _m.at<uchar>(x-1,y);
+				num_draw++;
+			}
+			if(y+1 < _m.cols && (!isVisit[x][y+1]) && abs(_m.at<uchar>(x,y+1)-g)<th){
+				// right
+				isVisit[x][y+1] = true;
+				tmp.push_back(mPoint(x,y+1,_m.at<uchar>(x,y+1)));
+				resMat.at<uchar>(x,y+1) = _m.at<uchar>(x,y+1);
+				num_draw++;
+			}
+			if(y-1 >= 0 && (!isVisit[x][y-1]) && abs(_m.at<uchar>(x,y-1)-g)<th){
+				// up
+				isVisit[x][y-1] = true;
+				tmp.push_back(mPoint(x,y-1,_m.at<uchar>(x,y-1)));
+				resMat.at<uchar>(x,y-1) = _m.at<uchar>(x,y-1);
+				num_draw++;
+			}
+		}
+		// cout<<tmp.size()<<endl;
+		edge = tmp;
+		// for(int i=0;i<edge.size();i++){
+		// 	cout<<"x: "<<edge[i].x<<"; y: "<<edge[i].y<<endl;
+		// }
+	}
+	// cout<<"num_draw: "<<num_draw<<endl;
+}
+
+// void testLineDiffuse(){
+
+// }
+
 
 void generateVideo(const int& FRAME_NUM)
 { 
@@ -138,6 +199,9 @@ int main(int argc, char* argv[])
 
 	string srcPath(argv[1]);
 	_m = imread(srcPath, CV_LOAD_IMAGE_GRAYSCALE);
+
+	
+
 	vector<mPoint> pVec;
 	for (int i = 0; i < _m.rows; ++i)
 		for (int j = 0; j < _m.cols; ++j)
@@ -158,27 +222,42 @@ int main(int argc, char* argv[])
 		for (int j = 0; j < _m.cols; ++j)
 			isVisit[i][j] = (_m.at<uchar>(i, j) == 255);
 
+	// testLineDiffuse();
+	// return 0;
+
 	cnt = 0;
 	Mat resMat = 255 * Mat::ones(_m.rows, _m.cols, CV_8UC1);
 	int n_cnt = 0;
 	int rx = rand() % _m.rows, ry = rand() % _m.cols;
-	mPoint next(rx, ry, 0);
-	while (cnt < pVec.size() * 999 / 1000)
+	mPoint next(rx, ry, _m.at<uchar>(rx,ry));
+	while (cnt < pVec.size() * 700 / 1000)
 	{
 		mPoint end = go(next.x, next.y, resMat, NUM, 0);
+		// mPoint end = next;
+		// isVisit[end.x][end.y] = true;
+		// resMat.at<uchar>(end.x,end.y) = _m.at<uchar>(end.x,end.y);
+		// line diffuse
+		// cout<<line_global.size()<<endl;
+		// line_global.push_back(end);
+		lineDiffuse(line_global,10,150,resMat);
+		line_global.clear();
+
 		next = getNextPoint(end);
+		// rx = rand() % _m.rows, ry = rand() % _m.cols;
+		// next = mPoint(rx, ry, _m.at<uchar>(rx,ry));
 		if (next.x == -1 && next.y == -1)
 			break;
 		
-		int fooDeep = end.gray;
-		if (fooDeep > min(_m.cols / 8, _m.rows / 8))
-		{
+		// int fooDeep = end.gray;
+		// if (fooDeep > min(_m.cols / 8, _m.rows / 8))
+		// {
 			n_cnt ++ ;
 			stringstream ss;
 			ss << n_cnt;
 			string fooStr = ss.str() + ".jpg";
 			imwrite(fooStr, resMat);
-		}
+		// }
+		// if(n_cnt>100)	break;
 	}
 	
 
