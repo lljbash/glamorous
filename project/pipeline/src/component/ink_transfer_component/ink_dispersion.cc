@@ -82,7 +82,7 @@ int InkDispersion::run_main(int argc, const char **argv)
             mwArray canny(canny_);
             mwArray img2Array;
 
-            inkdisp(1, img2Array, imgArray, lambda, alpha, canny);
+            inkdisp3(1, img2Array, imgArray, lambda, alpha, canny);
 
             for (int i = 0; i < s.height; i++) {
                 for (int j = 0; j < s.width; j++) {

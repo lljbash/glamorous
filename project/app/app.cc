@@ -51,7 +51,7 @@ std::string random_filename() {
 void GlamorousApp::initialize(const char *db_path) {
     Log::info("Initializing...");
     
-    ColorTransferComponentFactory ctcf(0.8);
+    ColorTransferComponentFactory ctcf(0.5);
     MeanContrastTransferComponentFactory mctcf;
     OilpaintTransferComponentFactory otcf;
     ColorAttributeExtractorComponentFactory caecf;
@@ -63,7 +63,7 @@ void GlamorousApp::initialize(const char *db_path) {
     Photo2SketchComponentFactory p2scf;
     Word2ImageComponentFactory w2icf;
     SimilarPicRccComponentFactory sprcf;
-    ComponentPointer cp_hsv = ctcf.create();
+    ComponentPointer cp_hsv = icf.create();
     ComponentPointer cp_mc = icf.create();
     ComponentPointer cp_oil = otcf.create();
     ComponentPointer cp_ce = caecf.create();

@@ -17,8 +17,8 @@ protected:
     int run_main(int argc, const char **argv);
 
 public:
-    static constexpr double DEFAULT_LAMBDA = 0.02;
-    static constexpr double DEFAULT_ALPHA = 0.8;
+    static constexpr double DEFAULT_LAMBDA = 1;
+    static constexpr double DEFAULT_ALPHA = 1;
     static constexpr double DEFAULT_CANNY = 0.3;
 
     InkDispersion();
