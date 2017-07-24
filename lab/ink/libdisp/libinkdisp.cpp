@@ -1,9 +1,9 @@
 //
 // MATLAB Compiler: 6.4 (R2017a)
-// Date: Fri Jul 21 18:40:53 2017
+// Date: Mon Jul 24 17:33:56 2017
 // Arguments:
-// "-B""macro_default""-W""cpplib:libinkdisp""-T""link:lib""inkdisp3.m""gptoolbo
-// x/imageprocessing/lischinski.m""-d""libdisp"
+// "-B""macro_default""-W""cpplib:libinkdisp""-T""link:lib""inkdisp3.m""lischins
+// ki.m""-d""libdisp"
 //
 
 #include <stdio.h>
