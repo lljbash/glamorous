@@ -30,4 +30,4 @@ garbage
 ## text2image
 
  - text2image based on search engine.
- - temporary garbage
+ - clustering based on mean shift clustering. Features come from CIE-LUV color space.
