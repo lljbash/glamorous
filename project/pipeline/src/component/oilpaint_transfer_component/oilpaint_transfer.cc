@@ -184,7 +184,7 @@ Stroke* paintCanvas(Stroke* head, IplImage* canvas, int mode) { // 논문상의 
 
 
 
-void paintLayer(IplImage* canvas, IplImage* reference, int R, int mode) { // 가장 기초가 되는 함수 (색칠할 x,y들을 구하는 등)
+void paintLayer(IplImage* canvas, IplImage* reference, int R, int mode, cv::VideoWriter &writer) { // 가장 기초가 되는 함수 (색칠할 x,y들을 구하는 등)
 
     CvSize size = cvGetSize(reference); // reference 즉 가우시안 필터가 적용된 원본 이미지의 사이즈 저장
 
@@ -194,7 +194,7 @@ void paintLayer(IplImage* canvas, IplImage* reference, int R, int mode) { // 가
     int grid = R*fg; // 하나의 범위가 되어줄 변수 (여기서는 1*R 값을 해줌)
 
                      // 2중 반복문으로써 하나의 grid^2 만큼의 영역을 반복하게 됨
-    for (int y = grid / 2; y <= size.height; y += grid) { // y값을 grid 값을 기준으로 반복함
+    for (int y = size.height; y >= grid / 2; y -= grid) { // y값을 grid 값을 기준으로 반복함
         for (int x = grid / 2; x <= size.width; x += grid) { // x값을 grid 값을 기준으로 반복함
 
             int M_x1, M_x2, M_y1, M_y2; // 다른 하나의 구역인 M을 위한 변수 (논문 상의 M)
@@ -264,9 +264,16 @@ void paintLayer(IplImage* canvas, IplImage* reference, int R, int mode) { // 가
     }
 
     // 논문 상의 paint all strokes in S on the canvas
+    int count = 0;
+    int interval = 160 / R;
     while (S != NULL) {
 
         S = paintCanvas(S, canvas, mode); // canvas에 저장된 Stroke 들을 칠하는 함수
+        ++count;
+        if (count % interval == 0) {
+            cv::Mat matimg = cv::cvarrToMat(canvas).clone();
+            writer.write(matimg);
+        }
 
     }
 
@@ -392,11 +399,12 @@ void gradientDirection(int x, int y, double* gx, double* gy, IplImage* refImage)
 
 //=================================================================//
 
-cv::Mat paint(IplImage* src, int * R, int R_length, int mode) {
+cv::Mat paint(IplImage* src, int * R, int R_length, int mode, IplImage *origin_canvas, cv::VideoWriter &writer) {
     CvSize size = cvGetSize(src); // 원본 이미지 사이즈
 
     IplImage* canvas = cvCreateImage(size, 8, 3); // 효과를 적용시킬 이미지 (논문상의 canvas(빈 이미지))
-    cvSet(canvas, cvScalar(255, 255, 255)); // 흰색 그림으로 설정 (흰 canvas)
+    // cvSet(canvas, cvScalar(255, 255, 255)); // 흰색 그림으로 설정 (흰 canvas)
+    cvCopy(origin_canvas, canvas);
     IplImage* referenceImage = cvCreateImage(size, 8, 3); // 가우시안 필터를 적용시킬 이미지(논문상의 referenceImage)
 
     for (int i = 0; i<R_length; i++) { // 브러쉬의 개수 만큼 반복
@@ -410,7 +418,7 @@ cv::Mat paint(IplImage* src, int * R, int R_length, int mode) {
         else if (mode == 1)
             cvSmooth(src, referenceImage, CV_GAUSSIAN, R[i] * 3 - 1);
 
-        paintLayer(canvas, referenceImage, R[i], mode); // dst라는 하나의 레이어 개념에 브러쉬 사이즈만큼 크기의 원을 채우기 위한 함수
+        paintLayer(canvas, referenceImage, R[i], mode, writer); // dst라는 하나의 레이어 개념에 브러쉬 사이즈만큼 크기의 원을 채우기 위한 함수
     }
     
     cv::Mat matimg = cv::cvarrToMat(canvas).clone();
@@ -421,11 +429,26 @@ cv::Mat paint(IplImage* src, int * R, int R_length, int mode) {
     return matimg;
 }
 
-cv::Mat oilpaint_transfer(const cv::Mat &image) {
+cv::Mat oilpaint_transfer(const cv::Mat &image, std::string pre_video_name, std::string output_video_name) {
     IplImage* src = NULL;
     src = cvCreateImage(cvSize(image.cols,image.rows), 8, 3);
     IplImage ipltemp = image;
     cvCopy(&ipltemp, src);
+    
+    cv::VideoWriter writer(output_video_name.c_str(), CV_FOURCC('D', 'I', 'V', 'X'), 60, image.size(), 1);
+    
+    cv::VideoCapture reader(pre_video_name.c_str());
+    cv::Mat frame;
+    cv::Mat origin_canvas;
+    while (reader.read(frame)) {
+        writer.write(frame);
+        origin_canvas = frame.clone();
+    }
+    reader.release();
+    IplImage *canvas = NULL;
+    canvas = cvCreateImage(cvSize(image.cols, image.rows), 8, 3);
+    IplImage ipltemp2 = origin_canvas;
+    cvCopy(&ipltemp2, canvas);
     
     int R1[] = { 8, 4, 4, 2, 2, 2, 2 };
     int R2[] = { 8, 16, 2, 2, 2, 2, 2 };
@@ -441,21 +464,23 @@ cv::Mat oilpaint_transfer(const cv::Mat &image) {
     switch (cmp / 80000) {
         case 0:
             R_length = sizeof(R1) / sizeof(int);
-            dst = paint(src, R1, R_length, 1);
+            dst = paint(src, R1, R_length, 1, canvas, writer);
             break;
         case 1:
             R_length = sizeof(R2) / sizeof(int);
-            dst = paint(src, R2, R_length, 1);
+            dst = paint(src, R2, R_length, 1, canvas, writer);
             break;
         case 2:
             R_length = sizeof(R3) / sizeof(int);
-            dst = paint(src, R3, R_length, 1);
+            dst = paint(src, R3, R_length, 1, canvas, writer);
             break;
         default:
             R_length = sizeof(R4) / sizeof(int);
-            dst = paint(src, R4, R_length, 1);
+            dst = paint(src, R4, R_length, 1, canvas, writer);
             break;
     }
+    
+    writer.release();
     
     cvReleaseImage(&src);
     return dst;

@@ -12,7 +12,10 @@ ComponentPointer OilpaintTransferComponentFactory::create(std::string name) {
 OilpaintTransferComponent::OilpaintTransferComponent(std::string name) : Component(name) {}
 
 void OilpaintTransferComponent::process(RequestStatusPointer request) {
-    cv::Mat dst = oilpaint::oilpaint_transfer(request->res_img);
+    std::string pre_video_name = request->video_name;
+    std::string video_name = request->id + "-oilpaint_video.avi";
+    cv::Mat dst = oilpaint::oilpaint_transfer(request->res_img, pre_video_name, video_name);
     request->res_img = dst.clone();
+    request->video_name = video_name;
 }
 
