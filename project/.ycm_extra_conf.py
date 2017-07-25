@@ -78,6 +78,8 @@ flags = [
 '/home/lljbash/glamorous/project/pipeline/include',
 '-I',
 '/home/lljbash/glamorous/project/pipeline/src',
+'-I',
+'/usr/include/python2.7',
 '-isystem',
 './tests/gmock/gtest',
 '-isystem',
