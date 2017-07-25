@@ -7,6 +7,7 @@
 #include <dirent.h>
 #include <unistd.h>
 #include <algorithm>
+#include <math.h>
 
 using namespace cv;
 using namespace std;
@@ -87,7 +88,6 @@ int getAllLuvImage(std::vector<mMat>& _v, const string& path)
 			_v.push_back(mMat(_m, files[i]));	
 			++cnt;
 		}
-		
 	}
 	return cnt;
 }
@@ -110,8 +110,6 @@ void getMaxMin(const vector<mMat>& _v)
 				max3 = max(max3, (int)_v[i].m.at<Vec3b>(j, k)[2]);
 				min3 = min(min3, (int)_v[i].m.at<Vec3b>(j, k)[2]);		
 			}
-
-		
 	}
 
 	cout << "1: (" << min1 << ", " << max1 << ")\n"
@@ -121,8 +119,6 @@ void getMaxMin(const vector<mMat>& _v)
 
 void getHistogram(vector<LuvHist>& lVec, const vector<mMat>& _v, int lNum, int uNum, int vNum)
 {
-	cout << "SIZE: " << _v.size() << endl;
-
 	double* vec = new double[lNum * uNum * vNum];
 	for (int i = 0; i < _v.size(); ++i)
 	{
@@ -137,9 +133,9 @@ void getHistogram(vector<LuvHist>& lVec, const vector<mMat>& _v, int lNum, int u
 			for (int k = 0; k < vCols; ++k)
 			{
 				const int LSIZE = 256, USIZE = 256, VSIZE = 256;
-				int lIndex = _v[i].m.at<Vec3b>(j, k)[0] / (LSIZE / lNum),
-					uIndex = _v[i].m.at<Vec3b>(j, k)[1] / (USIZE / uNum),
-					vIndex = _v[i].m.at<Vec3b>(j, k)[2] / (VSIZE / vNum);
+				int lIndex = _v[i].m.at<Vec3b>(j, k)[0] / ceil((double)LSIZE / lNum),
+					uIndex = _v[i].m.at<Vec3b>(j, k)[1] / ceil((double)USIZE / uNum),
+					vIndex = _v[i].m.at<Vec3b>(j, k)[2] / ceil((double)VSIZE / vNum);
 				int index = lIndex * uNum * vNum + uIndex * vNum + vIndex;
 				vec[index] += 1;
 			}
@@ -155,6 +151,17 @@ void getHistogram(vector<LuvHist>& lVec, const vector<mMat>& _v, int lNum, int u
 	delete[] vec;
 }
 
+void showLuvVec(const vector<LuvHist>& luvHistVec)
+{
+	for (int i = 0; i < luvHistVec.size(); ++i)
+	{
+		cout << "(";
+		for (int j = 0; j < luvHistVec[i].size - 1; ++j)
+			cout << luvHistVec[i].vec[j] << ", ";
+		cout <<  luvHistVec[i].vec[luvHistVec[i].size - 1] << ")\n";
+	}	
+}
+
 int main()
 {
 	string folderPath = "dogs_and_cats_in_beach";
@@ -165,17 +172,9 @@ int main()
 	// getMaxMin(_v);
 
 	vector<LuvHist> luvHistVec;
-	getHistogram(luvHistVec, _v, 2, 2, 2);
+	getHistogram(luvHistVec, _v, 3, 2, 4);
 
-	for (int i = 0; i < luvHistVec.size(); ++i)
-	{
-		cout << "(";
-		for (int j = 0; j < luvHistVec[i].size - 1; ++j)
-			cout << luvHistVec[i].vec[j] << ", ";
-		cout <<  luvHistVec[i].vec[luvHistVec[i].size - 1] << ")\n";
-	}
-
-	// cout << _v[0] << endl;
+	showLuvVec(luvHistVec);	
 
 	return 0;
 }
