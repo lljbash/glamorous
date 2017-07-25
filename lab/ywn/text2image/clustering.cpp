@@ -19,30 +19,18 @@ struct mMat
 	mMat(Mat _m, string _f) : m(_m), file(_f) {};
 };
 
-class LuvHist
+struct LuvHist
 {
-public:
-	double* vec;
+	vector<double> vec;
 	int size;
 	string file;
 	LuvHist() {};
-	LuvHist(int _size, string _f) : size(_size), file(_f)
+	LuvHist(vector<double>& _vec, int _size, string _f) : size(_size), file(_f)
 	{
-		vec = NULL;
+		for (int i = 0; i < _size; ++i)
+			vec.push_back(_vec[i]);
 	}
-	~LuvHist() 
-	{
-		if (vec != NULL)
-			delete[] vec;
-	}
-
-	void set(double* _vec)
-	{
-		if (vec == NULL)
-			vec = new double[size];
-		for (int i = 0; i < size; ++i)
-			vec[i] = _vec[i];
-	}
+	~LuvHist() {};
 };
 
 void getFiles(string path, vector<string>& files)  
@@ -138,7 +126,7 @@ void getHistogram(vector<LuvHist>& lVec, const vector<mMat>& _v, int lNum, int u
 	double* vec = new double[lNum * uNum * vNum];
 	for (int i = 0; i < _v.size(); ++i)
 	{
-		cout << "getHistogram, " << i << endl;
+		// cout << "getHistogram, " << i << endl;
 		string file = _v[i].file;
 		
 		for (int p = 0; p < lNum * uNum * vNum; ++p)
@@ -157,15 +145,12 @@ void getHistogram(vector<LuvHist>& lVec, const vector<mMat>& _v, int lNum, int u
 			}
 
 		for (int p = 0; p < lNum * uNum * vNum; ++p)
-		{
 			vec[p] /= (vRows * vCols);
-			cout << vec[p] << endl;
-		}
-		// cout << "ssss\n";
-		LuvHist lh(lNum * uNum * vNum, file);
-		lh.set(vec);
-		lVec.push_back(lh);
-		// cout << "aaaa\n";
+		
+		vector<double> foo;
+		for (int p = 0; p < lNum * uNum * vNum; ++p)
+			foo.push_back(vec[p]);
+		lVec.push_back(LuvHist(foo, lNum * uNum * vNum, file));
 	}
 	delete[] vec;
 }
