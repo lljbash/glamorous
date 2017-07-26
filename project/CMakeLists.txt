@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
 project(glamorous)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -g -fPIC -Wall -pthread")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O3 -DNDEBUG -fPIC -Wall -pthread")
 
 set(OpenCV_STATIC ON)
 find_package(OpenCV REQUIRED)

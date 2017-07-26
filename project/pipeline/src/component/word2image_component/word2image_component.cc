@@ -15,7 +15,21 @@ Word2ImageComponent::Word2ImageComponent(std::string name)
     : Component(name) {}
 
 void Word2ImageComponent::process(RequestStatusPointer request) {
-    if (request->text.find("flower") == std::string::npos) {
+    if (request->text.find("flower") != std::string::npos) {
+        Txt2Img_GAN gan(request->text.c_str(), "flower");
+        cv::Mat dst = gan.generate();
+        cv::resize(dst, dst, {512, 512});
+        request->src_img = dst.clone();
+        request->res_img = dst.clone();
+    }
+    else if (request->text.find("bird") != std::string::npos) {
+        Txt2Img_GAN gan(request->text.c_str(), "cub");
+        cv::Mat dst = gan.generate();
+        cv::resize(dst, dst, {512, 512});
+        request->src_img = dst.clone();
+        request->res_img = dst.clone();
+    }
+    else {
         std::string google_img_path = request->id + "-google.jpg";
         Py_Initialize();
         inittext2image();
@@ -31,12 +45,5 @@ void Word2ImageComponent::process(RequestStatusPointer request) {
         }
         request->src_img = google_img.clone();
         request->res_img = google_img.clone();
-    }
-    else {
-        Txt2Img_GAN gan(request->text.c_str(), "flower");
-        cv::Mat dst = gan.generate();
-        cv::resize(dst, dst, {512, 512});
-        request->src_img = dst.clone();
-        request->res_img = dst.clone();
     }
 }
