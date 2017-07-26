@@ -5,8 +5,7 @@ using namespace glamorous;
 
 int main(int argc, char const *argv[]) {
     InkVideo iv;
-    std::string filename("../a.jpg");
-    std::string videoname("video.avi");
-    iv.get_video(filename, videoname);
+    cv::Mat image = cv::imread(argv[1], 0);
+    iv.get_video(image, "video.avi");
     return 0;
 }

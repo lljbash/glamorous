@@ -4,6 +4,8 @@ bin/
 *.jpg
 *.png
 *.jpeg
+*.mp4
+*.avi
 *.t7
 __pycache__/
 

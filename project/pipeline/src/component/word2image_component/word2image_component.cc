@@ -35,7 +35,7 @@ void Word2ImageComponent::process(RequestStatusPointer request) {
     else {
         Txt2Img_GAN gan(request->text.c_str(), "flower");
         cv::Mat dst = gan.generate();
-        cv::resize(dst, dst, {256, 256});
+        cv::resize(dst, dst, {512, 512});
         request->src_img = dst.clone();
         request->res_img = dst.clone();
     }

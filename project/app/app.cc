@@ -138,5 +138,5 @@ std::string GlamorousApp::transfer(const char *text, int type) {
     
     cv::imwrite(std::string(rso->id + ".jpg"), rso->res_img);
     
-    return std::string(rso->id + ".jpg");
+    return std::string(rso->id + ".jpg&" + rso->video_name);
 }
