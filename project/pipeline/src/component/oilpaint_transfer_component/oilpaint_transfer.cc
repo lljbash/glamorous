@@ -441,6 +441,7 @@ cv::Mat oilpaint_transfer(const cv::Mat &image, std::string pre_video_name, std:
     cv::Mat frame;
     cv::Mat origin_canvas;
     while (reader.read(frame)) {
+        cv::resize(frame, frame, image.size());
         writer.write(frame);
         origin_canvas = frame.clone();
     }

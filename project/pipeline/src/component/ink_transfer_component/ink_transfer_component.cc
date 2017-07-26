@@ -14,10 +14,9 @@ InkTransferComponent::InkTransferComponent(std::string name)
 
 void InkTransferComponent::process(RequestStatusPointer request) {
     InkDispersion id;
-    cv::imwrite("lajitongtong.jpg", request->res_img);
     id.initialize(request->res_img);
     id.apply();
     cv::Mat dst = id.get_dst();
-//    cv::cvtColor(dst, dst, CV_BGR2GRAY);
+    cv::cvtColor(dst, dst, CV_BGR2GRAY);
     request->res_img = dst.clone();
 }

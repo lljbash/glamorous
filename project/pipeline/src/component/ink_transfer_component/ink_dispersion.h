@@ -18,7 +18,7 @@ protected:
 
 public:
     static constexpr double DEFAULT_LAMBDA = 1;
-    static constexpr double DEFAULT_ALPHA = 1;
+    static constexpr double DEFAULT_ALPHA = 0.5;
     static constexpr double DEFAULT_CANNY = 0.3;
 
     InkDispersion();

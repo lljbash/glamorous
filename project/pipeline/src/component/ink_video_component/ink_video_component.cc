@@ -15,7 +15,9 @@ InkVideoComponent::InkVideoComponent(std::string name) : Component(name) {}
 
 void InkVideoComponent::process(RequestStatusPointer request) {
     InkVideo iv;
-    std::string videoname = request->id + ".avi";
+    std::string videoname = request->id + "-ink_video.avi";
     iv.get_video(request->res_img, videoname);
-    Log::info("Video : %s", videoname.c_str());
+    request->video_name = videoname;
+    Log::info("Ink Video : %s", videoname.c_str());
 }
+

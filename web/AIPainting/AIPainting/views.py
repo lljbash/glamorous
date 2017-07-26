@@ -13,6 +13,7 @@ import sys
 import os
 import thread
 import time
+import random
 
 #from ctypes import byref, cdll, c_int
 #import ctypes
@@ -33,7 +34,7 @@ def homepage(request):
         style = int(str(style))
         print(content, style)
         
-        portno = 10000
+        portno = random.randint(23000, 23111)
         
         def call_server():
             os.system('./server %d /home/lljbash/data' % portno)
