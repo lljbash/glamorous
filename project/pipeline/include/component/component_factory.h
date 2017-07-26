@@ -90,4 +90,9 @@ public:
 	ComponentPointer create(std::string name = "InkVideoComponent") override;
 };
 
+class Adj5colorComponentFactory : ComponentFactory {
+public:
+	ComponentPointer create(std::string name = "Adj5colorComponent") override;
+};
+
 } // namespace glamorous

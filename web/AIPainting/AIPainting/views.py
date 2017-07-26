@@ -25,6 +25,7 @@ def homepage(request):
     #myapp.initialize('/home/lljbash/data')
     content = request.GET.get("content")
     style = request.GET.get("style")
+    adj = request.GET.get("adj")
 
     if(content == None):
         return render_to_response("AIPainting.html")
@@ -32,7 +33,7 @@ def homepage(request):
         
         content = str(content)
         style = int(str(style))
-        print(content, style)
+        print(content, style, adj)
         
         portno = random.randint(23000, 23111)
         
@@ -53,7 +54,7 @@ def homepage(request):
         ret = ''
         try:
             # Send data
-            message = '%d%s' % (style, content)
+            message = '%d%s#%s' % (style, content, adj)
             print >>sys.stderr, 'sending "%s"' % message
             sock.sendall(message)
             # Look for the response
@@ -67,18 +68,20 @@ def homepage(request):
         filename = ret.split('&')
         os.popen("ffmpeg -i '{input}' -ac 2 -b:v 2000k -c:a aac -c:v libx264 -b:a 160k -vprofile high -bf 0 -strict experimental -f mp4 '{output}.mp4'".format(input = filename[1], output = filename[1].split('.')[0]))
         
-        return HttpResponseRedirect("/consequence?content=%s&style=%s&image=%s&video=%s"%(content, style, filename[0], filename[1].split('.')[0]+'.mp4'))
+        return HttpResponseRedirect("/consequence?content=%s&style=%s&adj=%s&image=%s&video=%s"%(content, style, adj, filename[0], filename[1].split('.')[0]+'.mp4'))
 
 def consequence(request):
     content = request.GET.get("content")
     style = request.GET.get("style")
+    adj = request.GET.get("adj")
     content = str(content)
     style = int(str(style))
+    adj = str(adj)
     stylelist = ['Abstract painting','Post-impression','Neo-impression','Chinese ink painting','Suprematism','Impressionism']
     order = int(style) - 1
     
     image = 'static/' + request.GET.get("image").decode('utf-8')
     video = 'static/' + request.GET.get("video").decode('utf-8')
     
-    return render_to_response("Paintcons.html", {'content':content, 'style':stylelist[order], 'image':image, 'video':video})
+    return render_to_response("Paintcons.html", {'content':content, 'style':stylelist[order], 'adj':adj, 'image':image, 'video':video})
 

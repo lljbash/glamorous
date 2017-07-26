@@ -16,7 +16,7 @@ public:
     // 4: Shuimo
     // 5: Suprematism
     // 6: Impressionism
-    std::string transfer(const char *text, int style);
+    std::string transfer(const char *text, int style, const char *adj);
 
 private:
     glamorous::Pipeline pipeline_;

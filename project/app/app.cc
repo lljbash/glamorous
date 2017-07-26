@@ -51,11 +51,12 @@ std::string random_filename() {
 void GlamorousApp::initialize(const char *db_path) {
     Log::info("Initializing...");
     
-    ColorTransferComponentFactory ctcf(0.2);
+    ColorTransferComponentFactory ctcf(0.8);
     MeanContrastTransferComponentFactory mctcf;
     OilpaintTransferComponentFactory otcf;
     ColorAttributeExtractorComponentFactory caecf;
     SimilarPic5colorComponentFactory sp5cf;
+    Adj5colorComponentFactory a5cf;
     DatabaseMatchComponentFactory dmcf(db_path);
     InkTransferComponentFactory itcf;
     IdleComponentFactory icf;
@@ -65,11 +66,11 @@ void GlamorousApp::initialize(const char *db_path) {
     SimilarPicRccComponentFactory sprcf;
     SketchVideoComponentFactory svcf;
     InkVideoComponentFactory ivcf;
-    ComponentPointer cp_hsv = icf.create();
+    ComponentPointer cp_hsv = ctcf.create();
     ComponentPointer cp_mc = icf.create();
     ComponentPointer cp_oil = otcf.create();
-    ComponentPointer cp_ce = caecf.create();
-    ComponentPointer cp_5c = sp5cf.create();
+    ComponentPointer cp_ce = icf.create();
+    ComponentPointer cp_5c = a5cf.create();
     ComponentPointer cp_dm = dmcf.create();
     ComponentPointer cp_ink = itcf.create();
     ComponentPointer cp_idle1 = icf.create("Idle1");
@@ -85,12 +86,14 @@ void GlamorousApp::initialize(const char *db_path) {
     cp_dm->set_next_component(cp_w2i);
     cp_w2i->set_next_component(cp_p2s);
     cp_p2s->set_next_component(cp_ce);
-    cp_ce->set_next_component(cp_prcc);
-    cp_prcc->set_next_component(cp_st);
-    cp_st->set_next_component(cp_5c);
-    cp_5c->set_next_component(cp_hsv);
+    cp_ce->set_next_component(cp_5c);
+    cp_5c->set_next_component_func([cp_hsv, cp_prcc](RequestStatusPointer rsp) {
+        return rsp->adj == "none" ? cp_prcc : cp_hsv;
+    });
     cp_hsv->set_next_component(cp_mc);
-    cp_mc->set_next_component(cp_idle1);
+    cp_mc->set_next_component(cp_prcc);
+    cp_prcc->set_next_component(cp_st);
+    cp_st->set_next_component(cp_idle1);
     cp_idle1->set_next_component_func([cp_ink, cp_sv](RequestStatusPointer rsp) {
         return rsp->request_type == RequestStatus::RequestType::Shuimo ? cp_ink : cp_sv;
     });
@@ -103,13 +106,14 @@ void GlamorousApp::initialize(const char *db_path) {
     Log::info("Initialization done!");
 }
 
-std::string GlamorousApp::transfer(const char *text, int type) {
-    Log::info("New request %d %s", type, text);
+std::string GlamorousApp::transfer(const char *text, int type, const char *adj) {
+    Log::info("New request %d %s #%s", type, text, adj);
     
     RequestStatusPointer rs = std::make_shared<RequestStatus>();
     
     rs->id = random_filename();
     rs->text = std::string(text);
+    rs->adj = std::string(adj);
     
     switch (type) {
         case 1:

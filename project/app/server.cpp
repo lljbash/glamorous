@@ -52,10 +52,14 @@ int main(int argc, char *argv[]) {
     
     char temp[2] = {buffer[0], '\0'};
     int style = atoi(temp);
+    std::string text_adj(&buffer[1]);
+    int split = text_adj.find_first_of('#');
+    std::string text = std::string(text_adj, 0, split);
+    std::string adj = std::string(text_adj, split + 1);
     
     GlamorousApp app;
     app.initialize(argv[2]);
-    std::string ret = app.transfer(&buffer[1], style);
+    std::string ret = app.transfer(text.c_str(), style, adj.c_str());
     bzero(buffer, 256);
     memcpy(buffer, ret.c_str(), ret.length());
     

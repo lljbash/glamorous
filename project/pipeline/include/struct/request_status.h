@@ -19,6 +19,7 @@ struct RequestStatus {
     
     std::string id;
     RequestType request_type;
+    std::string adj;
     std::string text;
     
     ImageDataBasePointer image_db;
