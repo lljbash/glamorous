@@ -32,6 +32,25 @@ struct LuvHist
 			vec.push_back(_vec[i]);
 	}
 	~LuvHist() {};
+
+	LuvHist(const LuvHist& lh) 
+	{
+		size = lh.size;
+		file = lh.file;	
+		for (int i = 0; i < size; ++i)
+			vec.push_back(lh.vec[i]);
+	}
+
+	LuvHist& operator=(const LuvHist &lh)
+	{
+		vec.clear();
+		size = lh.size;
+		file = lh.file;	
+		for (int i = 0; i < size; ++i)
+			vec.push_back(lh.vec[i]);
+		
+		return *this; 
+	}
 };
 
 void getFiles(string path, vector<string>& files)  
@@ -162,6 +181,119 @@ void showLuvVec(const vector<LuvHist>& luvHistVec)
 	}	
 }
 
+double getDistance(LuvHist& a, LuvHist& b)
+{
+	// Bhattacharyya 
+	double sum = 0;
+	for (int i = 0; i < a.size; ++i)
+		sum +=  sqrt(a.vec[i] * b.vec[i]);
+	return sqrt(1 - sum);
+}
+
+
+// Mean Shift
+double bandwidth_square = 0.75 * 0.75;
+double stopthresh_square = 0.075;
+const double EPSILON = 1e-7;
+const double CLUSTER_EPSILON = 0.5;
+ 
+
+double euclidean_distance_square(LuvHist &a, LuvHist &b){\
+	// Bhattacharyya 
+	double sum = 0;
+	for (int i = 0; i < a.size; ++i)
+		sum +=  sqrt(a.vec[i] * b.vec[i]);
+	return sqrt(1 - sum);
+
+
+    double distance_square = 0;
+    int dim = (int)a.vec.size();
+    for (int i=0; i<dim; i++) {
+        distance_square += (a.vec[i]-b.vec[i])*(a.vec[i]-b.vec[i]);
+    }
+    return distance_square;
+}
+
+LuvHist add(const LuvHist &a, const LuvHist &b){
+    vector<double> sum;
+
+    int dim = (int)a.vec.size();
+    // cout << dim << ", " <<  b.vec.size() << endl;
+    for (int i=0; i<dim; i++) {
+        sum.push_back(a.vec[i] + b.vec[i]);
+    }
+    // cout << "fuck1.2.1\n";
+    return LuvHist(sum, dim, "");
+    // return res;
+}
+
+LuvHist subtract(const LuvHist &a, const LuvHist &b){
+    vector<double> sum;
+    int dim = (int)a.vec.size();
+    // cout << dim << ", " <<  b.vec.size() << endl;
+    for (int i = 0; i < dim; i++) {
+    	// cout << a.vec[i] << ", " << b.vec[i] << endl;
+        sum.push_back(a.vec[i] - b.vec[i]);
+    }
+    // cout << "fuck 1.1.1\n";
+    return LuvHist(sum, dim, "");
+}
+
+LuvHist get_cluster_center(vector<LuvHist>& all_points, int mode){
+    // mode 0: most points neighbor center
+    // random select
+    cout << "sss\n";
+    int index = rand() % all_points.size();
+    cout << index << endl;
+
+    LuvHist center_point = all_points[index];
+    while (1) {
+        vector<LuvHist> M;
+        for (int i=0; i<all_points.size(); i++) {
+            if (bandwidth_square > euclidean_distance_square(center_point, all_points[i])) {
+                M.push_back(all_points[i]);
+            }
+        }
+        // cout << "fuck1\n";
+        vector<double> foo;
+        for (int i = 0; i < all_points[0].size; ++i)
+        	foo.push_back(0);
+        LuvHist shift(foo, all_points[0].size, "");
+        for (int i=0; i<M.size(); i++) {
+        	// cout << "fuck1.1\n";
+            LuvHist delta = subtract(M[i], center_point);
+            // cout << "fuck1.2\n";
+            shift = add(shift, delta);
+            
+        }
+                // cout << "fuck2\n";
+        center_point = add(center_point, shift);
+                // cout << "fuck3\n";
+        double shift_square = 0;
+        for (int i=0; i<shift.vec.size(); i++) {
+            shift_square += shift.vec[i]*shift.vec[i];
+        }
+        cout << "distance " << shift_square << endl;
+                // cout << "fuck4\n";
+        if (stopthresh_square > shift_square) {
+        	// cout << "size = " << M.size() 
+        		// << " threshold = " << stopthresh_square << endl;
+        	if (M.size() == 0)
+        	{
+        		// stopthresh_square *= 2;
+        		// cout << "new "
+        	}
+        	else
+        	{
+        		int r = rand() % M.size();
+        	    return M[r];
+        	}
+            
+        }
+    }
+    return LuvHist();
+}
+
 int main()
 {
 	string folderPath = "dogs_and_cats_in_beach";
@@ -174,7 +306,10 @@ int main()
 	vector<LuvHist> luvHistVec;
 	getHistogram(luvHistVec, _v, 3, 2, 4);
 
-	showLuvVec(luvHistVec);	
+	// showLuvVec(luvHistVec);	
+
+	get_cluster_center(luvHistVec, 0);
+	// cout << res.file << endl;
 
 	return 0;
 }
