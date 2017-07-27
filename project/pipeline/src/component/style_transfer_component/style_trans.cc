@@ -9,7 +9,7 @@ using namespace std;
 using namespace cv;
 
 StyleTrans::StyleTrans(string prefix)
-    : prefix_(prefix), gpu_(false) {
+    : prefix_(prefix), gpu_(false), alpha_(DEFAULT_ALPHA) {
 
 }
 
@@ -23,6 +23,10 @@ void StyleTrans::setPrefix(string prefix) {
 
 void StyleTrans::setGpu(bool gpu) {
     gpu_ = gpu;
+}
+
+void StyleTrans::setAlpha(double alpha) {
+    alpha_ = alpha;
 }
 
 void StyleTrans::initialize(const string &contentName, const string &styleName) {
@@ -57,9 +61,15 @@ int StyleTrans::apply() {
 
     // Call parseOpt & runTest
     lua_getglobal(L, "parseAndRun");
+    // Prefix of the files
     lua_pushstring(L, prefix_.c_str());
+    // Whether to use GPU
     lua_pushinteger(L, gpu_?0:-1);
-    if (lua_pcall(L, 2, 0, 0) != 0) {
+    // Whether to perserve color
+    lua_pushboolean(L, true);
+    // Push alpha
+    lua_pushnumber(L, alpha_);
+    if (lua_pcall(L, 4, 0, 0) != 0) {
         Log::error("Call Function Error! %s", lua_tostring(L, -1));
         return -1;
     }
