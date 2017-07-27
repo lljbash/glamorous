@@ -3,6 +3,8 @@
 namespace glamorous {
 namespace oilpaint {
 
+constexpr int scale = 2.;
+
 //====================자료형 선언====================//
 
 typedef struct Point {
@@ -265,13 +267,14 @@ void paintLayer(IplImage* canvas, IplImage* reference, int R, int mode, cv::Vide
 
     // 논문 상의 paint all strokes in S on the canvas
     int count = 0;
-    int interval = 160 / R;
+    int interval = 240 / R;
     while (S != NULL) {
 
         S = paintCanvas(S, canvas, mode); // canvas에 저장된 Stroke 들을 칠하는 함수
         ++count;
         if (count % interval == 0) {
             cv::Mat matimg = cv::cvarrToMat(canvas).clone();
+            cv::resize(matimg, matimg, cv::Size(matimg.cols / scale, matimg.rows / scale));
             writer.write(matimg);
         }
 
@@ -422,6 +425,7 @@ cv::Mat paint(IplImage* src, int * R, int R_length, int mode, IplImage *origin_c
     }
     
     cv::Mat matimg = cv::cvarrToMat(canvas).clone();
+    cv::resize(matimg, matimg, cv::Size(matimg.cols / scale, matimg.rows / scale));
     
     cvReleaseImage(&canvas);
     cvReleaseImage(&referenceImage);
@@ -430,9 +434,12 @@ cv::Mat paint(IplImage* src, int * R, int R_length, int mode, IplImage *origin_c
 }
 
 cv::Mat oilpaint_transfer(const cv::Mat &image, std::string pre_video_name, std::string output_video_name) {
+    cv::Mat image2 = image.clone();
+    cv::resize(image2, image2, cvSize(scale * image.cols, scale * image.rows));
+    
     IplImage* src = NULL;
-    src = cvCreateImage(cvSize(image.cols,image.rows), 8, 3);
-    IplImage ipltemp = image;
+    src = cvCreateImage(cvSize(image2.cols,image2.rows), 8, 3);
+    IplImage ipltemp = image2;
     cvCopy(&ipltemp, src);
     
     cv::VideoWriter writer(output_video_name.c_str(), CV_FOURCC('D', 'I', 'V', 'X'), 60, image.size(), 1);
@@ -446,15 +453,16 @@ cv::Mat oilpaint_transfer(const cv::Mat &image, std::string pre_video_name, std:
         origin_canvas = frame.clone();
     }
     reader.release();
+    cv::resize(origin_canvas, origin_canvas, cvSize(image2.cols, image2.rows));
     IplImage *canvas = NULL;
-    canvas = cvCreateImage(cvSize(image.cols, image.rows), 8, 3);
+    canvas = cvCreateImage(cvSize(origin_canvas.cols, origin_canvas.rows), 8, 3);
     IplImage ipltemp2 = origin_canvas;
     cvCopy(&ipltemp2, canvas);
     
-    int R1[] = { 8, 4, 4, 2, 2, 2, 2 };
-    int R2[] = { 8, 16, 2, 2, 2, 2, 2 };
-    int R3[] = { 8, 16, 4, 4, 2, 2, 2 };
-    int R4[] = { 8, 16, 4, 2, 2, 2, 2 };
+    int R1[] = { 16, 8, 4, 4, 2, 2 };
+    int R2[] = { 32, 16, 8, 2, 2, 2 };
+    int R3[] = { 32, 16, 8, 4, 4, 2 };
+    int R4[] = { 32, 16, 8, 4, 2, 2 };
     
     int w = src->width;
     int h = src->height;
