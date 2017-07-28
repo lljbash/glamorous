@@ -18,12 +18,17 @@ private:
 
     bool gpu_;
 
+    double alpha_;
+
 public:
+    static const DEFAULT_ALPHA = 1;
+
     StyleTrans(std::string prefix);
     ~StyleTrans();
 
     void setPrefix(std::string prefix);
     void setGpu(bool gpu);
+    void setAlpha(double alpha);
 
     void initialize(const cv::Mat &content, const cv::Mat &style);
     void initialize(const std::string &contentName, const std::string &styleName);
