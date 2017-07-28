@@ -1,6 +1,7 @@
-# Glarmorous
+# Glamorous
 
 Maintained by llj_bash.
+
 E-mail: lljbash@gmail.com
 
 ## Platform
@@ -12,6 +13,7 @@ Ubuntu 16.04 LTS
 ### Code
 
 Writen mainly by C++ with C++11 standard.
+
 Follow *Google C++ Style Guide*. (not exactly the same)
 
 Well self-commented codes with necessary READMEs. Start reading from `project/app/app.h`.
@@ -115,6 +117,8 @@ project/pipeline/non-cpp/lua/style_transfer/models
 ```
 
 - Change line 126 in `web/AIPainting/AIPainting/settings.py` to where your 'static' directory are.
+
+- Change line 41 in `web/AIPainting/AIPainting/views.py` to where your image database are.
 
 - **(IMPORTANT)** In `web/AIPainting/static`, run
 ```
