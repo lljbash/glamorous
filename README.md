@@ -1,4 +1,4 @@
-# Glarmorous
+# Glamorous
 
 Maintained by llj_bash.
 
