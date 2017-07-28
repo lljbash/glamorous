@@ -14,4 +14,6 @@
 
 3. 此时即可调用工程中的相关C++类实现组件功能。
 
+若要修改 alpha 值，只需要修改 `testFromCpp.lua` 中的 `opt.alpha` 即可。
+
 
