@@ -13,6 +13,7 @@ StyleTransferComponent::StyleTransferComponent(std::string name) : Component(nam
 
 void StyleTransferComponent::process(RequestStatusPointer request) {
     StyleTrans st(request->id);
+    st.setAlpha(0.3);
     st.initialize(request->res_img, request->ref_img);
     st.apply();
     cv::Mat dst = st.get_dst();

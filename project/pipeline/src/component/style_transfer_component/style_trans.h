@@ -21,7 +21,7 @@ private:
     double alpha_;
 
 public:
-    static const DEFAULT_ALPHA = 1;
+    static constexpr int DEFAULT_ALPHA = 1;
 
     StyleTrans(std::string prefix);
     ~StyleTrans();
