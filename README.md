@@ -118,6 +118,8 @@ project/pipeline/non-cpp/lua/style_transfer/models
 
 - Change line 126 in `web/AIPainting/AIPainting/settings.py` to where your 'static' directory are.
 
+- Change line 41 in `web/AIPainting/AIPainting/views.py` to where your image database are.
+
 - **(IMPORTANT)** In `web/AIPainting/static`, run
 ```
 python2 ../manage.py runserver 127.0.0.1:2333
