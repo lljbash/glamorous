@@ -8,6 +8,7 @@
 #include <unistd.h>
 #include <algorithm>
 #include <math.h>
+#include <time.h>
 
 using namespace cv;
 using namespace std;
@@ -50,6 +51,14 @@ struct LuvHist
 			vec.push_back(lh.vec[i]);
 		
 		return *this; 
+	}
+
+	void print()
+	{
+		cout << "size: " << size << endl;
+		for (int i = 0; i < size; ++i)
+			cout << vec[i] << ", ";
+		cout << endl;
 	}
 };
 
@@ -192,18 +201,16 @@ double getDistance(LuvHist& a, LuvHist& b)
 
 
 // Mean Shift
-double bandwidth_square = 0.75 * 0.75;
-double stopthresh_square = 0.075;
-const double EPSILON = 1e-7;
-const double CLUSTER_EPSILON = 0.5;
+double bandwidth_square = 0.75 * 0.075;
+double stopthresh_square = 0.7;
  
 
 double euclidean_distance_square(LuvHist &a, LuvHist &b){\
 	// Bhattacharyya 
-	double sum = 0;
-	for (int i = 0; i < a.size; ++i)
-		sum +=  sqrt(a.vec[i] * b.vec[i]);
-	return sqrt(1 - sum);
+	// double sum = 0;
+	// for (int i = 0; i < a.size; ++i)
+	// 	sum +=  sqrt(a.vec[i] * b.vec[i]);
+	// return sqrt(1 - sum);
 
 
     double distance_square = 0;
@@ -214,29 +221,21 @@ double euclidean_distance_square(LuvHist &a, LuvHist &b){\
     return distance_square;
 }
 
-LuvHist add(const LuvHist &a, const LuvHist &b){
-    vector<double> sum;
-
+void add(const LuvHist &a, const LuvHist &b, LuvHist &res)
+{
+	res.vec.clear();
     int dim = (int)a.vec.size();
-    // cout << dim << ", " <<  b.vec.size() << endl;
-    for (int i=0; i<dim; i++) {
-        sum.push_back(a.vec[i] + b.vec[i]);
-    }
-    // cout << "fuck1.2.1\n";
-    return LuvHist(sum, dim, "");
-    // return res;
+    for (int i = 0; i < dim; i++) 
+        res.vec.push_back(a.vec[i] + b.vec[i]);
+   	res.size = dim;
 }
 
-LuvHist subtract(const LuvHist &a, const LuvHist &b){
-    vector<double> sum;
+void subtract(const LuvHist &a, const LuvHist &b, LuvHist& res){
+  	res.vec.clear();
     int dim = (int)a.vec.size();
-    // cout << dim << ", " <<  b.vec.size() << endl;
-    for (int i = 0; i < dim; i++) {
-    	// cout << a.vec[i] << ", " << b.vec[i] << endl;
-        sum.push_back(a.vec[i] - b.vec[i]);
-    }
-    // cout << "fuck 1.1.1\n";
-    return LuvHist(sum, dim, "");
+    for (int i = 0; i < dim; i++) 
+    	res.vec.push_back(a.vec[i] - b.vec[i]);
+    res.size = dim;
 }
 
 LuvHist get_cluster_center(vector<LuvHist>& all_points, int mode){
@@ -247,40 +246,58 @@ LuvHist get_cluster_center(vector<LuvHist>& all_points, int mode){
     cout << index << endl;
 
     LuvHist center_point = all_points[index];
+ 	all_points[index].print();
+ 	center_point.print();
+ 	cout << "----------------------------\n";
+
     while (1) {
         vector<LuvHist> M;
-        for (int i=0; i<all_points.size(); i++) {
-            if (bandwidth_square > euclidean_distance_square(center_point, all_points[i])) {
+        for (int i = 0; i < all_points.size(); i++) {
+        	double dist;
+            if (bandwidth_square > (dist = euclidean_distance_square(center_point, all_points[i])))
+            {
+            	// cout  << "dist = " << dist << endl;
                 M.push_back(all_points[i]);
             }
         }
-        // cout << "fuck1\n";
+
+        cout  << "M SIZE: " << M.size() << endl;
+
         vector<double> foo;
         for (int i = 0; i < all_points[0].size; ++i)
         	foo.push_back(0);
         LuvHist shift(foo, all_points[0].size, "");
-        for (int i=0; i<M.size(); i++) {
-        	// cout << "fuck1.1\n";
-            LuvHist delta = subtract(M[i], center_point);
-            // cout << "fuck1.2\n";
-            shift = add(shift, delta);
-            
+        
+        for (int i = 0; i < M.size(); i++) {
+        	LuvHist delta, tmp;
+        	subtract(M[i], center_point, delta);            
+            add(shift, delta, tmp);
+            shift = tmp;
         }
-                // cout << "fuck2\n";
-        center_point = add(center_point, shift);
-                // cout << "fuck3\n";
-        double shift_square = 0;
-        for (int i=0; i<shift.vec.size(); i++) {
-            shift_square += shift.vec[i]*shift.vec[i];
-        }
+        
+        
+       	LuvHist tmpCenterPoint;
+        cout << "UPDATE CENTER:\n";
+        center_point.print();
+        shift.print();
+        add(center_point, shift, tmpCenterPoint);
+        center_point = tmpCenterPoint;
+        center_point.print();
+        int aaa;
+        cin >> aaa;
+
+		double shift_square = 0;
+        for (int i = 0; i < shift.vec.size(); i++) 
+            shift_square += shift.vec[i] * shift.vec[i];
+        
         cout << "distance " << shift_square << endl;
-                // cout << "fuck4\n";
         if (stopthresh_square > shift_square) {
-        	// cout << "size = " << M.size() 
-        		// << " threshold = " << stopthresh_square << endl;
+        	cout << "size = " << M.size() 
+        		<< " threshold = " << stopthresh_square << endl;
         	if (M.size() == 0)
         	{
-        		// stopthresh_square *= 2;
+        		stopthresh_square *= 2;
+        		bandwidth_square *= 2;
         		// cout << "new "
         	}
         	else
@@ -296,6 +313,8 @@ LuvHist get_cluster_center(vector<LuvHist>& all_points, int mode){
 
 int main()
 {
+	srand((unsigned int) time(0));
+
 	string folderPath = "dogs_and_cats_in_beach";
 	vector<mMat> _v;
 	int imageNum = getAllLuvImage(_v, folderPath);
@@ -308,8 +327,8 @@ int main()
 
 	// showLuvVec(luvHistVec);	
 
-	get_cluster_center(luvHistVec, 0);
-	// cout << res.file << endl;
+	LuvHist res = get_cluster_center(luvHistVec, 0);
+	cout << res.file << endl;
 
 	return 0;
 }

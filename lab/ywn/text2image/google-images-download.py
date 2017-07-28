@@ -94,7 +94,7 @@ while i<len(search_keyword):
     
      #make a search keyword  directory
     try:
-        search_keywords = 'D:/SummerPractice/googleImage/google-images-download/' + search_keywords.replace(' ', '_')
+        search_keywords = search_keywords.replace(' ', '_')
         os.makedirs(search_keywords)
     except OSError, e:
         if e.errno != 17:
