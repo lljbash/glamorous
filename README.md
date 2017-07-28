@@ -50,7 +50,7 @@ Well self-commented codes with necessary READMEs. Start reading from `project/ap
 
 - Go to `pipeline/non-cpp/python/photo2sketch/imgsaliency`, run `python2 setup.py build && sudo python2 setup.py install`
 
-- Download image database from [TODO: not uploaded yet].
+- Download [image database](https://drive.google.com/file/d/0BwkXIzTQn8H2OEpDb0lnR24zZEk/view?usp=sharing).
 
 - Change line 9 in `project/app/app.cc` to where you placed your database.
 
