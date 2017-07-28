@@ -28,6 +28,8 @@ Well self-commented codes with necessary READMEs. Start reading from `project/ap
 
 - Python 2.7 (libpython2.7.so)
 
+- python-tk
+
 - Pip2: networkx scipy numpy skimage matplotlib sklearn pdb
 
 - Matlab R2017a (Installed in /usr/local/MATLAB/R2017a. Change it in CMakelists.txt)
@@ -36,7 +38,7 @@ Well self-commented codes with necessary READMEs. Start reading from `project/ap
 
 - [Torch](http://torch.ch/docs/getting-started.html) (Installed in ~/torch/install/lib. Change it in CMakelists.txt)
 
-- Some Lua libraries. Call `luarocks` to install them when error occurs.
+- Some Lua libraries (unsup cutorch cunn cudnn). Call `luarocks` to install them if error occurs.
 
 - Cuda 8.0
 
