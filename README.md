@@ -118,6 +118,8 @@ project/pipeline/non-cpp/lua/style_transfer/lua-style
 project/pipeline/non-cpp/lua/style_transfer/models
 ```
 
+- Copy `project/build/bin/server` to `web/AIPainting/static`.
+
 - Change line 126 in `web/AIPainting/AIPainting/settings.py` to where your 'static' directory are.
 
 - Change line 41 in `web/AIPainting/AIPainting/views.py` to where your image database are.
