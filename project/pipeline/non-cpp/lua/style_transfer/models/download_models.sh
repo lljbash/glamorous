@@ -1,4 +1,3 @@
-cd models
 # The VGG-19 network is obtained by:
 # 1. converting vgg_normalised.caffemodel to .t7 using loadcaffe
 # 2. inserting a convolutional module at the beginning to preprocess the image
@@ -8,4 +7,3 @@ cd models
 wget -c https://s3.amazonaws.com/xunhuang-public/adain/decoder.t7
 wget -c https://s3.amazonaws.com/xunhuang-public/adain/decoder-content-similar.t7
 wget -c https://s3.amazonaws.com/xunhuang-public/adain/vgg_normalised.t7
-cd .. 
