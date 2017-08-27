@@ -14,7 +14,7 @@ Ubuntu 16.04 LTS
 
 Writen mainly by C++ with C++11 standard.
 
-Follow *Google C++ Style Guide*. (not exactly the same)
+Following *Google C++ Style Guide*. (not exactly the same)
 
 Well self-commented codes with necessary READMEs. Start reading from `project/app/app.h`.
 
