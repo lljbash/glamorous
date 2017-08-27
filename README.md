@@ -129,5 +129,5 @@ project/pipeline/non-cpp/lua/style_transfer/models
 python2 ../manage.py runserver 127.0.0.1:2333
 ```
 
-Visit [AIPainting](127.0.0.1:2333/homepage) and enjoy painting!
+Visit [AIPainting](http://127.0.0.1:2333/homepage) and enjoy painting!
 
